@@ -16,11 +16,6 @@ preprocess:
    data_fraction: 0.5
 
 inputs:
-   pf_points:
-      length: 100
-      vars:
-         - [part_etarel, null]
-         - [part_phirel, null]
    pf_features:
       length: 100
       vars:
