@@ -16,15 +16,19 @@ class ParticleFlowNetwork(nn.Module):
     def __init__(self, input_dims, num_classes,
                  Phi_sizes=(100, 100, 128),
                  F_sizes=(100, 100, 100),
+                 use_bn=False,
                  for_inference=False,
                  **kwargs):
 
         super(ParticleFlowNetwork, self).__init__(**kwargs)
+        # input bn
+        self.input_bn = nn.BatchNorm1d(input_dims) if use_bn else nn.Identity(),
         # per-particle functions
         phi_layers = []
         for i in range(len(Phi_sizes)):
             phi_layers.append(nn.Sequential(
                 nn.Conv1d(input_dims if i == 0 else Phi_sizes[i - 1], Phi_sizes[i], kernel_size=1),
+                nn.BatchNorm1d(Phi_sizes[i]) if use_bn else nn.Identity(),
                 nn.ReLU())
             )
         self.phi = nn.Sequential(*phi_layers)
@@ -54,7 +58,8 @@ def get_model(data_config, **kwargs):
     F_sizes = (100, 100, 100)
     input_dims = len(data_config.input_dicts['pf_features'])
     num_classes = len(data_config.label_value)
-    model = ParticleFlowNetwork(input_dims, num_classes, Phi_sizes=Phi_sizes, F_sizes=F_sizes)
+    model = ParticleFlowNetwork(input_dims, num_classes, Phi_sizes=Phi_sizes,
+                                F_sizes=F_sizes, use_bn=kwargs.get('use_bn', False))
 
     model_info = {
         'input_names': list(data_config.input_names),
