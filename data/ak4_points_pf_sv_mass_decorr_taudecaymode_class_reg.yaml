@@ -11,8 +11,8 @@ test_time_selection:
 new_variables:
    ### [format] name: formula
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
-   pfcand_mask: awkward.JaggedArray.ones_like(jet_pfcand_deta)
-   sv_mask: awkward.JaggedArray.ones_like(jet_sv_deta)
+   pfcand_mask: ak.ones_like(jet_pfcand_deta)
+   sv_mask: ak.ones_like(jet_sv_deta)
    label_tau_1h0p: (jet_tauflav==1) & (jet_taudecaymode==0)
    label_tau_1h1or2p: (jet_tauflav==1) & ((jet_taudecaymode==1) | (jet_taudecaymode==2))
    label_tau_3h0p: (jet_tauflav==1) & (jet_taudecaymode==10)
@@ -76,8 +76,8 @@ inputs:
          - [jet_pfcand_electron_dphiIn, 0, 25]
          - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
          - [jet_pfcand_electron_r9, 0, 1, 0, 1]
-         - [jet_pfcand_electron_fbrem, 0, 1, 0, 1]
-         - [jet_pfcand_electron_convProb, null]	 
+         - [jet_pfcand_electron_fbrem, 0, 1, 0, 1] 
+         - [jet_pfcand_electron_convProb, null]
    pf_mask:
       length: 50
       vars:

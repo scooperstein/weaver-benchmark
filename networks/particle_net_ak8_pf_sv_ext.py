@@ -1,5 +1,5 @@
 import torch
-from utils.nn.model.ParticleNet import ParticleNetTagger
+from nn.model.ParticleNet import ParticleNetTagger
 
 
 def get_model(data_config, **kwargs):

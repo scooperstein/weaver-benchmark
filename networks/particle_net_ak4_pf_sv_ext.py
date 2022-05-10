@@ -1,5 +1,5 @@
 import torch
-from utils.nn.model.ParticleNet import ParticleNetTagger
+from nn.model.ParticleNet import ParticleNetTagger
 
 
 def get_model(data_config, **kwargs):
@@ -18,7 +18,7 @@ def get_model(data_config, **kwargs):
         (64, 0.1)
     ]
 
-    use_fusion = True
+    input_dims = 48;
 
     pf_features_dims = len(data_config.input_dicts['pf_features'])
     sv_features_dims = len(data_config.input_dicts['sv_features'])
@@ -30,8 +30,8 @@ def get_model(data_config, **kwargs):
                               num_targets,
                               conv_params, 
                               fc_params,
-                              input_dims=48,
-                              use_fusion=use_fusion,
+                              input_dims=input_dims,
+                              use_fusion=True,
                               use_fts_bn=kwargs.get('use_fts_bn', False),
                               use_counts=kwargs.get('use_counts', True),
                               pf_input_dropout=kwargs.get('pf_input_dropout', None),

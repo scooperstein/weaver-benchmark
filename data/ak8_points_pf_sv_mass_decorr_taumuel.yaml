@@ -23,8 +23,8 @@ test_time_selection:
 new_variables:
    ### [format] name: formula
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
-   pfcand_mask: awkward.JaggedArray.ones_like(jet_pfcand_deta)
-   sv_mask: awkward.JaggedArray.ones_like(jet_sv_deta)
+   pfcand_mask: ak.ones_like(jet_pfcand_deta)
+   sv_mask: ak.ones_like(jet_sv_deta)
    label_H_tt: (jet_flav_2prong_partonjet_match==7)  & (jet_tauflav==2) & (jet_muflav==0) & (jet_elflav==0)
    label_H_mm: (jet_flav_2prong_partonjet_match==2)  & (jet_tauflav==0) & (jet_muflav==2) & (jet_elflav==0)
    label_H_ee: (jet_flav_2prong_partonjet_match==1)  & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==2)

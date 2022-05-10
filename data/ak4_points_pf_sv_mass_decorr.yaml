@@ -11,8 +11,8 @@ test_time_selection:
 new_variables:
    ### [format] name: formula
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
-   pfcand_mask: awkward.JaggedArray.ones_like(jet_pfcand_deta)
-   sv_mask: awkward.JaggedArray.ones_like(jet_sv_deta)
+   pfcand_mask: ak.ones_like(jet_pfcand_deta)
+   sv_mask: ak.ones_like(jet_sv_deta)
    label_b:    (jet_hflav==5)
    label_c:    (jet_hflav==4)
    label_uds:  (jet_hflav==0) & (np.abs(jet_pflav)>=0) & (np.abs(jet_pflav)<4)
@@ -66,14 +66,14 @@ inputs:
          - [jet_pfcand_id, 2, 0.2]
          - [jet_pfcand_hcalfraction, 0, 1, 0, 1]
          - [jet_pfcand_calofraction, 0, 1, 0, 5]
-	 - [jet_pfcand_muon_id, 0, 0.3]
-	 - [jet_pfcand_electron_eOverP, 0, 0.5]
-	 - [jet_pfcand_electron_detaIn, 0, 25]
-	 - [jet_pfcand_electron_dphiIn, 0, 25]
-	 - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
-	 - [jet_pfcand_electron_r9, 0, 1, 0, 1]
-	 - [jet_pfcand_electron_fbrem, 0, 1, 0, 1]
-	 - [jet_pfcand_electron_convProb, null]
+         - [jet_pfcand_muon_id, 0, 0.3]
+         - [jet_pfcand_electron_eOverP, 0, 0.5]
+         - [jet_pfcand_electron_detaIn, 0, 25]
+         - [jet_pfcand_electron_dphiIn, 0, 25]
+         - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
+         - [jet_pfcand_electron_r9, 0, 1, 0, 1]
+         - [jet_pfcand_electron_fbrem, 0, 1, 0, 1]
+         - [jet_pfcand_electron_convProb, null]
    pf_mask:
       length: 50
       vars:
