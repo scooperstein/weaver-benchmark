@@ -2,7 +2,7 @@ selection:
    ### use `&`, `|`, `~` for logical operations on numpy arrays
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
    >-
-   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=200) & (jet_genmatch_pt>0) & (event%7!=0) & 
+   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7!=0) & 
    (((jet_flav_2prong_partonjet_match==-1) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0)) |
     ((jet_flav_2prong_partonjet_match==1)  & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==2)) |
     ((jet_flav_2prong_partonjet_match==2)  & (jet_tauflav==0) & (jet_muflav==2) & (jet_elflav==0)) |
@@ -13,7 +13,7 @@ selection:
 
 test_time_selection:
    >-
-   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=200) & (jet_genmatch_pt>0) & (event%7==0) & 
+   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7==0) & 
    (((jet_flav_2prong_partonjet_match==-1) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0)) |
     ((jet_flav_2prong_partonjet_match==1)  & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==2)) |
     ((jet_flav_2prong_partonjet_match==2)  & (jet_tauflav==0) & (jet_muflav==2) & (jet_elflav==0)) |
@@ -134,7 +134,8 @@ labels:
 targets:
    type: custom
    value:
-      target_mass: np.clip(np.maximum(1,jet_mass_regression_truth)/np.maximum(1,jet_mass),0,4)
+      target_mass_vis: np.clip(np.maximum(0,jet_mass_truth_vis)/np.maximum(0.001,jet_mass),0,4)
+      target_mass_nu: np.clip(np.maximum(0,jet_mass_truth)/np.maximum(0.001,jet_mass_truth_vis),0,4)
 
 observers:
    - event
@@ -178,10 +179,10 @@ observers:
    - jet_eta_truth
    - jet_phi_truth
    - jet_mass_truth
-   - jet_pt_regression_truth
-   - jet_eta_regression_truth
-   - jet_phi_regression_truth
-   - jet_mass_regression_truth
+   - jet_pt_truth_vis
+   - jet_eta_truth_vis
+   - jet_phi_truth_vis
+   - jet_mass_truth_vis
    - jet_pnet_probHbb
    - jet_pnet_probHcc
    - jet_pnet_probHqq
@@ -216,7 +217,7 @@ weights:
    reweight_method: flat
    reweight_vars:
       jet_pt: [250, 315, 396, 499, 628, 791, 995, 1253, 1577, 1987, 2500]
-      jet_mass_truth: [25, 45, 65, 85, 105, 125, 145, 165, 185, 205]
+      jet_mass_truth: [25, 45, 65, 85, 105, 125, 145, 165, 185, 205, 225, 255]
    reweight_classes: [label_H_tt, label_H_tm, label_H_te, label_H_mm, label_H_ee, label_H_bb, label_H_cc, label_H_qq, label_H_gg, label_QCD]
    class_weights: [1.75, 2.75, 2.75, 1.5, 1.5, 3.0, 3.0, 3.0, 3.0, 3.0]
    reweight_threshold: 15
