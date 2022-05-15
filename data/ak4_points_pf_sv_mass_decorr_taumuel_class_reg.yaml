@@ -79,7 +79,8 @@ inputs:
          - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
          - [jet_pfcand_electron_r9, 0, 1, 0, 1]
          - [jet_pfcand_electron_fbrem, 0, 1, 0, 1]
-         - [jet_pfcand_electron_convProb, null]   pf_mask:
+         - [jet_pfcand_electron_convProb, null]
+   pf_mask:
       length: 50
       vars:
          - [pfcand_mask, null]
