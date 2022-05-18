@@ -64,7 +64,6 @@ inputs:
          - [jet_pfcand_energy_log, 1, 0.5]
          - [jet_pfcand_deta, null]
          - [jet_pfcand_dphi, null]
-         - [jet_pfcand_eta, 0, 0.8]
          - [jet_pfcand_charge, null]
          - [jet_pfcand_frompv, 2, 1]
          - [jet_pfcand_nlostinnerhits, null]
@@ -87,12 +86,10 @@ inputs:
          - [jet_pfcand_hcalfraction, 0, 1, 0, 1]
          - [jet_pfcand_calofraction, 0, 1, 0, 5]
          - [jet_pfcand_muon_id, 0, 0.3]
-         - [jet_pfcand_electron_eOverP, 0, 0.5]
          - [jet_pfcand_electron_detaIn, 0, 25]
          - [jet_pfcand_electron_dphiIn, 0, 25]
          - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
          - [jet_pfcand_electron_r9, 0, 1, 0, 1]
-         - [jet_pfcand_electron_fbrem, 0, 1, 0, 1]
          - [jet_pfcand_electron_convProb, null]
       pf_mask:
       length: 100
@@ -134,8 +131,8 @@ labels:
 targets:
    type: custom
    value:
-      target_mass_vis: np.clip(np.maximum(0,jet_mass_truth_vis)/np.maximum(0.001,jet_mass),0,4)
-      target_mass_nu: np.clip(np.maximum(0,jet_mass_truth)/np.maximum(0.001,jet_mass_truth_vis),0,4)
+      target_mass_vis: np.clip(np.divide(jet_mass_truth_vis,jet_mass,out=np.zeros_like(jet_mass_truth_vis),where=jet_mass!=0)),0,4)
+      target_mass_nu: np.clip(np.divide(jet_mass_truth,jet_mass_truth_vis,out=np.zeros_like(jet_mass_truth),where=jet_mass_truth_vis!=0),0,4)
 
 observers:
    - event

@@ -48,7 +48,6 @@ inputs:
          - [jet_pfcand_energy_log, 1, 0.5]
          - [jet_pfcand_deta, null]
          - [jet_pfcand_dphi, null]
-         - [jet_pfcand_eta, 0, 0.8]
          - [jet_pfcand_charge, null]
          - [jet_pfcand_frompv, 2, 1]
          - [jet_pfcand_nlostinnerhits, null]
@@ -71,12 +70,10 @@ inputs:
          - [jet_pfcand_hcalfraction, 0, 1, 0, 1]
          - [jet_pfcand_calofraction, 0, 1, 0, 5]
          - [jet_pfcand_muon_id, 0, 0.3]
-         - [jet_pfcand_electron_eOverP, 0, 0.5]
          - [jet_pfcand_electron_detaIn, 0, 25]
          - [jet_pfcand_electron_dphiIn, 0, 25]
          - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
          - [jet_pfcand_electron_r9, 0, 1, 0, 1]
-         - [jet_pfcand_electron_fbrem, 0, 1, 0, 1] 
          - [jet_pfcand_electron_convProb, null]
    pf_mask:
       length: 50
@@ -94,7 +91,6 @@ inputs:
          - [jet_sv_mass, 1.2, 0.3]
          - [jet_sv_deta, null]
          - [jet_sv_dphi, null]
-         - [jet_sv_eta, 0, 0.8]
          - [jet_sv_ntrack, 3, 1]
          - [jet_sv_chi2, 1, 0.5]
          - [jet_sv_dxy, 0.2, 0.25]
@@ -118,8 +114,8 @@ labels:
 targets:
     type: custom
     value:
-      target_pt_vis : np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*(jet_genmatch_pt/jet_pt)+((label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*(jet_genmatch_lep_vis_pt/jet_pt),0,4)
-      target_pt_nu  : np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*(jet_genmatch_wnu_pt/jet_genmatch_pt) + ((label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*(np.divide(jet_genmatch_lep_pt,jet_genmatch_lep_vis_pt,out=np.zeros_like(jet_genmatch_lep_pt),where=jet_genmatch_lep_vis_pt!=0)),0,4);
+      target_pt_vis : np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*(np.divide(jet_genmatch_pt,jet_pt,out=np.zeros_like(jet_genmatch_pt),where=jet_pt!=0))+((label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*(np.divide(jet_genmatch_lep_vis_pt,jet_pt,out=np.zeros_like(jet_genmatch_lep_vis_pt),where=jet_pt!=0)),0,4)
+      target_pt_nu  : np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*(np.divide(jet_genmatch_wnu_pt,jet_genmatch_pt,out=np.zeros_like(jet_genmatch_wnu_pt),where=jet_genmatch_pt!=0)) + ((label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*(np.divide(jet_genmatch_lep_pt,jet_genmatch_lep_vis_pt,out=np.zeros_like(jet_genmatch_lep_pt),where=jet_genmatch_lep_vis_pt!=0)),0,4);
 
 
 observers:
