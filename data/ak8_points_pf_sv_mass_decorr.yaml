@@ -3,12 +3,12 @@ selection:
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
    >-
    (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0) & (event%7!=0) &
-   ((jet_flav_2prong_partonjet_match==-1) | ((jet_flav_2prong_partonjet_match>=3) & (jet_flav_2aprong_partonjet_match<=6)))
+   ((jet_flav_2prong_partonjet_match==-1) | ((jet_flav_2prong_partonjet_match>=3) & (jet_flav_2prong_partonjet_match<=6)))
 
 test_time_selection:
    >-
    (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0) & (event%7==0) &
-   ((jet_flav_2prong_partonjet_match==-1) | ((jet_flav_2prong_partonjet_match>=3) & (jet_flav_2aprong_partonjet_match<=6)))
+   ((jet_flav_2prong_partonjet_match==-1) | ((jet_flav_2prong_partonjet_match>=3) & (jet_flav_2prong_partonjet_match<=6)))
 
 new_variables:
    ### [format] name: formula
@@ -192,6 +192,6 @@ weights:
       jet_pt: [250, 315, 396, 499, 628, 791, 995, 1253, 1577, 1987, 2500]
       jet_mass_truth: [25, 45, 65, 85, 105, 125, 145, 165, 185, 205, 225, 255]
    reweight_classes: [label_H_bb, label_H_cc, label_H_qq, label_H_gg, label_QCD]
-   class_weights: [1, 1, 1, 1, 1]
+   class_weights: [1, 1, 1, 1.5, 1]
    reweight_threshold: 15
    reweight_hists:
