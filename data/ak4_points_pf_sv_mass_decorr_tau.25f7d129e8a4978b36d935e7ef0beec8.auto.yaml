@@ -251,7 +251,7 @@ observers:
 - jet_pnetlast_probuds
 - jet_pnetlast_probg
 - jet_pnetlast_probmu
-- jet_pnetlast_probel
+- jet_pnetlast_probele
 - jet_pnetlast_probtau1h0p
 - jet_pnetlast_probtau1h1or2p
 - jet_pnetlast_probtau3h0p
