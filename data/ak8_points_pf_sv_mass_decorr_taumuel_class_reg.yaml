@@ -2,7 +2,7 @@ selection:
    ### use `&`, `|`, `~` for logical operations on numpy arrays
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
    >-
-   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7!=0) & 
+   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=25) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7!=0) & 
    (((jet_flav_2prong_partonjet_match==-1) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0)) |
     ((jet_flav_2prong_partonjet_match==1)  & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==2)) |
     ((jet_flav_2prong_partonjet_match==2)  & (jet_tauflav==0) & (jet_muflav==2) & (jet_elflav==0)) |
@@ -13,7 +13,7 @@ selection:
 
 test_time_selection:
    >-
-   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=30) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7==0) & 
+   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=25) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7==0) & 
    (((jet_flav_2prong_partonjet_match==-1) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0)) |
     ((jet_flav_2prong_partonjet_match==1)  & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==2)) |
     ((jet_flav_2prong_partonjet_match==2)  & (jet_tauflav==0) & (jet_muflav==2) & (jet_elflav==0)) |
@@ -128,11 +128,7 @@ labels:
 targets:
    type: custom
    value:
-      target_mass: np.clip(((label_H_bb) | (label_H_cc) | (label_H_qq) | (label_H_gg))*np.nan_to_num(jet_mass_truth/jet_mass,nan=0,posinf=0,neginf=0)+((label_H_tt) | (label_H_tm) | (label_H_te) | (label_QCD))*
-((label_b) | (label_c) | (label_uds) | (label_g))*np.nan_to_num(jet_genmatch_pt/jet_pt,nan=0,posinf=0,neginf=0)+
-
-np.nan_to_num(jet_mass_truth_vis/jet_mass,nan=0,posinf=0,neginf=0),0,4)
-      target_mass_nu: np.clip(np.nan_to_num(jet_mass_truth/jet_mass_truth_vis,nan=0,posinf=0,neginf=0),0,4)
+      target_mass: np.clip((((label_H_bb) | (label_H_cc) | (label_H_qq) | (label_H_gg)) & (jet_softdrop_mass < 25))*np.nan_to_num(jet_mass_truth/jet_mass,nan=0,posinf=0,neginf=0)+(((label_H_bb) | (label_H_cc) | (label_H_qq) | (label_H_gg)) & (jet_softdrop_mass >= 25))*np.nan_to_num(jet_mass_truth/jet_softdrop_mass,nan=0,posinf=0,neginf=0)+(((label_H_tt) | (label_H_tm) | (label_H_te) | (label_QCD)) & (jet_softdrop_mass < 25))*np.nan_to_num(jet_mass_truth_vis/jet_mass,nan=0,posinf=0,neginf=0)+(((label_H_tt) | (label_H_tm) | (label_H_te) | (label_QCD)) & (jet_softdrop_mass >= 25))*np.nan_to_num(jet_mass_truth_vis/jet_softdrop_mass,nan=0,posinf=0,neginf=0),0,10)
 
 observers:
    - event
