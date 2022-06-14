@@ -5,9 +5,9 @@ from nn.model.ParticleNet import ParticleNetTagger
 def get_model(data_config, **kwargs):
 
     conv_params = [
-        (16, (160, 128, 96)),
+        (16, (192, 160, 96)),
+        (14, (192, 160, 128)),
         (12, (192, 160, 128)),
-        (8,  (192, 160, 128)),
         ]
 
     fc_params = [
