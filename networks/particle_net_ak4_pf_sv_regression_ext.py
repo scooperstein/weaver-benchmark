@@ -6,11 +6,13 @@ from nn.model.ParticleNet import ParticleNetTagger
 
 
 def get_model(data_config, **kwargs):
+
     conv_params = [
-        (16, (160, 128, 96)),
+        (16, (192, 160, 96)),
+        (14, (192, 160, 128)),
         (12, (192, 160, 128)),
-        (8,  (192, 160, 128)),
-    ]
+        ]
+
     fc_params = [
         (192, 0.1),
         (160, 0.1),
@@ -18,18 +20,19 @@ def get_model(data_config, **kwargs):
         (96, 0.1),
         (64, 0.1)
     ]
-    use_fusion = True
+
+    input_dims = 48;
 
     pf_features_dims = len(data_config.input_dicts['pf_features'])
     sv_features_dims = len(data_config.input_dicts['sv_features'])
     num_classes = 0
-    num_targets = 1
+    num_targets = len(data_config.target_value)
     model = ParticleNetTagger(pf_features_dims, 
                               sv_features_dims, 
                               num_classes,
                               conv_params, 
                               fc_params,
-                              input_dims=48,
+                              input_dims=input_dims,
                               use_fusion=use_fusion,
                               use_fts_bn=kwargs.get('use_fts_bn', False),
                               use_counts=kwargs.get('use_counts', True),
