@@ -22,6 +22,7 @@ def get_model(data_config, **kwargs):
     ]
 
     input_dims = 48;
+    use_fusion = True
 
     pf_features_dims = len(data_config.input_dicts['pf_features'])
     sv_features_dims = len(data_config.input_dicts['sv_features'])
