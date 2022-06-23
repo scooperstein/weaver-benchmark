@@ -36,7 +36,7 @@ def get_model(data_config, **kwargs):
                               num_targets,
                               conv_params, 
                               fc_params,
-                              input_dims=48,
+                              input_dims=point_features,
                               use_fusion=use_fusion,
                               use_fts_bn=kwargs.get('use_fts_bn', False),
                               use_counts=kwargs.get('use_counts', True),
@@ -73,5 +73,3 @@ class LogCoshLoss(torch.nn.L1Loss):
 
 def get_loss(data_config, **kwargs):
     return LogCoshLoss(reduction='mean');
-    #return torch.nn.HuberLoss(reduction='mean',delta=kwargs.get('delta',1.0));                                                                                                                    
-    #return torch.nn.MSELoss(reduction='mean');  

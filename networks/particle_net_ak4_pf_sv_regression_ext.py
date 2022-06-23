@@ -31,6 +31,7 @@ def get_model(data_config, **kwargs):
     model = ParticleNetTagger(pf_features_dims, 
                               sv_features_dims, 
                               num_classes,
+                              num_targets,
                               conv_params, 
                               fc_params,
                               input_dims=input_dims,
