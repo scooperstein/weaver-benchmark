@@ -2,7 +2,7 @@ selection:
    ### use `&`, `|`, `~` for logical operations on numpy arrays
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
    >-
-   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=25) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7!=0) & 
+   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=25) & (jet_mass_truth<=250) & (jet_mass_truth_vis>0) & (jet_genmatch_pt>0) & (event%7!=0) & 
    (((jet_flav_2prong_partonjet_match==-1) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0)) |
     ((jet_flav_2prong_partonjet_match==1)  & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==2)) |
     ((jet_flav_2prong_partonjet_match==2)  & (jet_tauflav==0) & (jet_muflav==2) & (jet_elflav==0)) |
@@ -13,7 +13,7 @@ selection:
 
 test_time_selection:
    >-
-   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=25) & (jet_mass_truth<=250) & (jet_genmatch_pt>0) & (event%7==0) & 
+   (np.abs(jet_eta)<2.4) & (jet_pt>250) & (jet_pt<2500) & (jet_mass_truth>=25) & (jet_mass_truth<=250) & (jet_mass_truth_vis>0) & (jet_genmatch_pt>0) & (event%7==0) & 
    (((jet_flav_2prong_partonjet_match==-1) & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0)) |
     ((jet_flav_2prong_partonjet_match==1)  & (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==2)) |
     ((jet_flav_2prong_partonjet_match==2)  & (jet_tauflav==0) & (jet_muflav==2) & (jet_elflav==0)) |
