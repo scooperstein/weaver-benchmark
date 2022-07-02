@@ -192,7 +192,16 @@ observers:
    - jet_pnetlast_masscorr
    - jet_flav_2prong_partonjet_match
    - jet_flav_2prong_parton_match
-
+   - label_H_tt
+   - label_H_tm
+   - label_H_te
+   - label_H_bb
+   - label_H_cc
+   - label_H_qq
+   - label_H_gg
+   - label_QCD_2hf
+   - label_QCD_1hf
+   - label_QCD_0hf
 monitor_variables:
 
 weights:

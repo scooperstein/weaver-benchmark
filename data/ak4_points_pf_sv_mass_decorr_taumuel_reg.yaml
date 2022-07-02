@@ -198,7 +198,16 @@ observers:
    - jet_elematch_dz
    - jet_elematch_id
    - jet_elematch_idscore
-
+   - label_mu
+   - label_el
+   - label_tau_1h0p
+   - label_tau_1h1or2p
+   - label_tau_3h0p 
+   - label_tau_3h1p
+   - label_b
+   - label_c
+   - label_uds
+   - label_g
 monitor_variables:
 
 weights:
