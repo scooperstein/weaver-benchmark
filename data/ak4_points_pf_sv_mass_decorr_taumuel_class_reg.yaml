@@ -116,7 +116,8 @@ labels:
 targets:
     type: custom
     value:
-       target_pt: np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt,nan=0,posinf=0,neginf=0)+((label_mu) | (label_el) | (label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*np.nan_to_num(jet_genmatch_lep_vis_pt/jet_pt,nan=0,posinf=0,neginf=0),0,10)
+       target_pt_vis: np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*np.nan_to_num(jet_genmatch_pt/jet_pt,nan=0,posinf=0,neginf=0)+((label_mu) | (label_el) | (label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*np.nan_to_num(jet_genmatch_lep_vis_pt/jet_pt,nan=0,posinf=0,neginf=0),0,10)
+       target_pt_nu: np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_genmatch_pt,nan=0,posinf=0,neginf=0)+((label_mu) | (label_el) | (label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*np.nan_to_num(jet_genmatch_lep_pt/jet_genmatch_vis_pt,nan=0,posinf=0,neginf=0),0,10)
 
 observers:
    - event
