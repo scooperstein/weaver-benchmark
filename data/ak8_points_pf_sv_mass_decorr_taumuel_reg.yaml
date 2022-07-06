@@ -120,7 +120,7 @@ inputs:
 targets:
    type: custom
    value:   
-      target_mass: (np.clip(((label_H_bb) | (label_H_cc) | (label_H_qq) | (label_H_gg))*np.nan_to_num(np.log(np.abs(jet_mass_truth)/jet_mass),nan=0,posinf=0,neginf=0)+((label_H_tt) | (label_H_tm) | (label_H_te) | (label_QCD))*np.nan_to_num(np.log(np.abs(jet_mass_truth_vis)/jet_mass),nan=0,posinf=0,neginf=0),-5,5)) 
+      target_mass: (np.clip(((label_H_bb) | (label_H_cc) | (label_H_qq) | (label_H_gg))*np.nan_to_num(np.abs(jet_mass_truth)/jet_mass,nan=0,posinf=0,neginf=0)+((label_H_tt) | (label_H_tm) | (label_H_te) | (label_QCD))*np.nan_to_num(np.abs(jet_mass_truth_vis)/jet_mass,nan=0,posinf=0,neginf=0),0,10)) 
 
 observers:
    - event
