@@ -77,11 +77,11 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
         loss_cat = torch.nn.functional.cross_entropy(input_cat,target_cat,reduction=self.reduction);
                 
         if self.reduction == 'none':            
-            return loss_cat+self.loss_lambda*loss_reg, loss_cat, loss_reg;
+            return loss_cat+self.loss_lambda*loss_reg, loss_cat, loss_reg*self.loss_lambda;
         elif self.reduction == 'mean':
-            return loss_cat+self.loss_lambda*loss_reg.mean(), loss_cat, loss_reg.mean()
+            return loss_cat+self.loss_lambda*loss_reg.mean(), loss_cat, loss_reg.mean()*self.loss_lambda;
         elif self.reduction == 'sum':
-            return loss_cat+self.loss_lambda*loss_reg.sum(), loss_cat, loss_reg.sum()
+            return loss_cat+self.loss_lambda*loss_reg.sum(), loss_cat, loss_reg.sum()*self.loss_lambda;
 
 class CrossEntropyHuberLoss(torch.nn.L1Loss):
 
@@ -104,7 +104,7 @@ class CrossEntropyHuberLoss(torch.nn.L1Loss):
         target_cat = target[:,:1].squeeze().long();
         loss_cat = torch.nn.functional.cross_entropy(input_cat,target_cat,reduction=self.reduction);
 
-        return loss_cat+loss_lambda*loss_reg, loss_cat, loss_reg
+        return loss_cat+self.loss_lambda*loss_reg, loss_cat, loss_reg*self.loss_lambda;
 
 class CrossEntropyMSELoss(torch.nn.L1Loss):
 
@@ -126,7 +126,7 @@ class CrossEntropyMSELoss(torch.nn.L1Loss):
         target_cat = target[:,:1].squeeze().long();
         loss_cat = torch.nn.functional.cross_entropy(input_cat,target_cat,reduction=self.reduction);
 
-        return loss_cat+loss_lambda*loss_reg, loss_cat, loss_reg
+        return loss_cat+self.loss_lambda*loss_reg, loss_cat, loss_reg*self.loss_lambda;
 
 
 def get_loss(data_config, **kwargs):
