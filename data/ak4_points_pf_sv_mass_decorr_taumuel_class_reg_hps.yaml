@@ -116,7 +116,7 @@ labels:
 targets:
     type: custom
     value:
-       target_pt: np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*np.nan_to_num(jet_genmatch_pt/jet_pt,nan=0,posinf=0,neginf=0)+(label_mu)*np.nan_to_num((jet_mumatch_pt>0)*(jet_genmatch_lep_vis_pt/jet_mumatch_pt)+(jet_mumatch_pt<=0)*(jet_genmatch_lep_vis_pt/jet_pt),nan=0,posinf=0,neginf=0)+(label_el)*np.nan_to_num((jet_elematch_pt>0)*(jet_genmatch_lep_vis_pt/jet_elematch_pt)+(jet_elematch_pt<=0)*(jet_genmatch_lep_vis_pt/jet_pt),nan=0,posinf=0,neginf=0)+((label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p))*np.nan_to_num((jet_taumatch_pt>0)*(jet_genmatch_lep_vis_pt/jet_taumatch_pt)+(jet_taumatch_pt<=0)*(jet_genmatch_lep_vis_pt/jet_pt),nan=0,posinf=0,neginf=0),0,4)
+       target_pt: np.clip(((label_b) | (label_c) | (label_uds) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt,nan=0,posinf=0,neginf=0)+(label_mu)*np.nan_to_num((jet_mumatch_pt>0)*(jet_genmatch_lep_vis_pt/jet_mumatch_pt)+(jet_mumatch_pt<=0)*(jet_genmatch_lep_vis_pt/jet_pt),nan=0,posinf=0,neginf=0)+(label_el)*np.nan_to_num((jet_elematch_pt>0)*(jet_genmatch_lep_vis_pt/jet_elematch_pt)+(jet_elematch_pt<=0)*(jet_genmatch_lep_vis_pt/jet_pt),nan=0,posinf=0,neginf=0)+((label_tau_1h0p) | (label_tau_1h1or2p) | (label_tau_3h0p) | (label_tau_3h1p))*np.nan_to_num((jet_taumatch_pt>0)*(jet_genmatch_lep_vis_pt/jet_taumatch_pt)+(jet_taumatch_pt<=0)*(jet_genmatch_lep_vis_pt/jet_pt),nan=0,posinf=0,neginf=0),0.3,2)
 
 observers:
    - event
