@@ -48,6 +48,7 @@ inputs:
          ### pad_value(optional, default=0)]
          - [jet_pfcand_pt_log, 1, 0.5]
          - [jet_pfcand_energy_log, 1, 0.5]
+         - [jet_pfcand_eta, 0, 0.8]
          - [jet_pfcand_deta, null]
          - [jet_pfcand_dphi, null]
          - [jet_pfcand_charge, null]
