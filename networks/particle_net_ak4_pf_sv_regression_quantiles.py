@@ -56,11 +56,11 @@ class LogCoshLoss(torch.nn.L1Loss):
 
     __constants__ = ['reduction','quantiles']
 
-    def __init__(self, reduction: str = 'mean') -> None:
+    def __init__(self, reduction: str = 'mean', quantiles: list = []) -> None:
         super(LogCoshLoss, self).__init__(None, None, reduction)
         self.quantiles = quantiles;
 
-    def forward(self, input: Tensor, target: Tensor, quantiles: Tensor) -> Tensor:
+    def forward(self, input: Tensor, target: Tensor) -> Tensor:
 
         ## account for the presence of quantiles
         x = input - target;
