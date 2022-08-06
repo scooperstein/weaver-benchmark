@@ -3,13 +3,26 @@ from nn.model.ParticleNet import ParticleNetTagger
 
 
 def get_model(data_config, **kwargs):
+
+    ## input numer of point features to EdgeConvBlock                                                                                                                                  
+    point_features = 48;
+    ## convoluational layers in EdgeConvBlock and kNN                                                                                                                                   
     conv_params = [
-        (16, (64, 64, 64)),
-        (16, (128, 128, 128)),
-        (16, (256, 256, 256)),
+        (22, (256, 192, 128)),
+        (18, (256, 192, 128)),
+        (16, (256, 192, 128)),
         ]
-    fc_params = [(256, 0.1)]
+    ## use fusion layer for edge-conv block                                                                                                                                        
     use_fusion = True
+    ## fully connected output layers                                                                                                                                                           
+    fc_params = [
+        (256, 0.1),
+        (192, 0.1),
+        (160, 0.1),
+        (128, 0.1),
+        (96, 0.1),
+        (64, 0.1)
+    ]
 
     pf_features_dims = len(data_config.input_dicts['pf_features'])
     sv_features_dims = len(data_config.input_dicts['sv_features'])
@@ -21,6 +34,7 @@ def get_model(data_config, **kwargs):
                               num_targets,
                               conv_params, 
                               fc_params,
+                              input_dims=point_features,
                               use_fusion=use_fusion,
                               use_fts_bn=kwargs.get('use_fts_bn', False),
                               use_counts=kwargs.get('use_counts', True),

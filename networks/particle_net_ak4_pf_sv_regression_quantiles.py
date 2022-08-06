@@ -8,7 +8,7 @@ from nn.model.ParticleNet import ParticleNetTagger
 def get_model(data_config, **kwargs):
 
     conv_params = [
-        (16, (192, 160, 96)),
+        (16, (192, 160, 128)),
         (14, (192, 160, 128)),
         (12, (192, 160, 128)),
         ]
@@ -53,14 +53,29 @@ def get_model(data_config, **kwargs):
     return model, model_info
 
 class LogCoshLoss(torch.nn.L1Loss):
-    __constants__ = ['reduction']
+
+    __constants__ = ['reduction','quantiles']
 
     def __init__(self, reduction: str = 'mean') -> None:
         super(LogCoshLoss, self).__init__(None, None, reduction)
+        self.quantiles = quantiles;
 
-    def forward(self, input: Tensor, target: Tensor) -> Tensor:
-        x = input - target
-        loss = x + torch.nn.functional.softplus(-2. * x) - math.log(2)
+    def forward(self, input: Tensor, target: Tensor, quantiles: Tensor) -> Tensor:
+
+        ## account for the presence of quantiles
+        x = input - target;
+        for idx, q in enumerate(self.quantiles):
+            if q <= 0 and idx == 0:
+                loss = x[idx] + torch.nn.functional.softplus(-2. * x[idx]) - math.log(2);
+            elif q <= 0 and idx != 0:
+                loss += x[idx] + torch.nn.functional.softplus(-2. * x[idx]) - math.log(2);
+            elif q > 0 and idx == 0:
+                loss  = q*x[idx]*torch.ge(x[idx],0)
+                loss += (q-1)*(x[idx])*torch.less(x[idx],0);
+            elif q > 0 and idx != 0:
+                loss += q*x[idx]*torch.ge(x[idx],0)
+                loss += (q-1)*(x[idx])*torch.less(x[idx],0);
+                
         if self.reduction == 'none':
             return loss
         elif self.reduction == 'mean':
@@ -69,4 +84,5 @@ class LogCoshLoss(torch.nn.L1Loss):
             return loss.sum()
 
 def get_loss(data_config, **kwargs):
-    return LogCoshLoss(reduction='mean');
+    quantiles = data_config.target_quantile;
+    return LogCoshLoss(reduction='mean',quantiles=quantiles);
