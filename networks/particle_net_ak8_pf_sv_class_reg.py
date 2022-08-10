@@ -55,22 +55,35 @@ def get_model(data_config, **kwargs):
 
     return model, model_info
 
+class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
+    __constants__ = ['reduction','nclass','ntarget','loss_lambda']
 
-class LogCoshLoss(torch.nn.L1Loss):
-    __constants__ = ['reduction']
+    def __init__(self, reduction: str = 'mean', nclass: int = 1, ntarget: int = 1, loss_lambda: float = 1.) -> None:
+        super(CrossEntropyLogCoshLoss, self).__init__(None, None, reduction)
+        self.nclass = nclass;
+        self.ntarget = ntarget;
+        self.loss_lambda = loss_lambda
 
-    def __init__(self, reduction: str = 'mean') -> None:
-        super(LogCoshLoss, self).__init__(None, None, reduction)
+    def forward(self, input: Tensor, y_cat: Tensor, y_reg: Tensor) -> Tensor:
 
-    def forward(self, input: Tensor, target: Tensor) -> Tensor:
-        x = input - target
-        loss = x + torch.nn.functional.softplus(-2. * x) - math.log(2)
+        ## regression term                                                                                                                                                                            
+        input_reg = input[:,self.nclass:self.nclass+self.ntarget].squeeze();
+        y_reg     = y_reg.squeeze();
+        loss_reg  = (input_reg-y_reg)+torch.nn.functional.softplus(-2.*(input_reg-y_reg))-math.log(2);
+        ## classification term                                                                                                                                                                        
+        input_cat = input[:,:self.nclass].squeeze();
+        y_cat     = y_cat.squeeze().long();
+        loss_cat  = torch.nn.functional.cross_entropy(input_cat,y_cat,reduction=self.reduction);
+
+        ## final loss and pooling over batcc                                                                                                                                                          
         if self.reduction == 'none':
-            return loss
+            return loss_cat+self.loss_lambda*loss_reg, loss_cat, loss_reg*self.loss_lambda;
         elif self.reduction == 'mean':
-            return loss.mean()
+            return loss_cat+self.loss_lambda*loss_reg.mean(), loss_cat, loss_reg.mean()*self.loss_lambda;
         elif self.reduction == 'sum':
-            return loss.sum()
+            return loss_cat+self.loss_lambda*loss_reg.sum(), loss_cat, loss_reg.sum()*self.loss_lambda;
 
 def get_loss(data_config, **kwargs):
-    return LogCoshLoss(reduction='mean');
+    nclass  = len(data_config.label_value);
+    ntarget = len(data_config.target_value);
+    return CrossEntropyLogCoshLoss(reduction=kwargs.get('reduction','mean'),loss_lambda=kwargs.get('loss_lambda',1),nclass=nclass,ntarget=ntarget);
