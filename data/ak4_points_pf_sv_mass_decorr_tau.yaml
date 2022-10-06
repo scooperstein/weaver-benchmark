@@ -170,8 +170,7 @@ observers:
    - jet_pnetlast_probtau1h1or2p
    - jet_pnetlast_probtau3h0p
    - jet_pnetlast_probtau3h1p
-   - jet_pnetlast_ptviscorr
-   - jet_pnetlast_ptnucorr
+   - jet_pnetlast_ptcorr
    - jet_taumatch_pt
    - jet_taumatch_eta
    - jet_taumatch_phi

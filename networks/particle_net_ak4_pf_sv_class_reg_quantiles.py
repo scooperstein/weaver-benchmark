@@ -8,12 +8,8 @@ def get_model(data_config, **kwargs):
 
     ## input numer of point features to EdgeConvBlock
     point_features = 48;
-    #point_features = 56;
     ## convoluational layers in EdgeConvBlock and kNN
     conv_params = [
-        #(16, (224, 192, 160)),
-        #(14, (224, 192, 160)),
-        #(12, (224, 192, 160))
         (16, (256, 208, 176)),
         (14, (256, 208, 176)),
         (12, (256, 208, 176))
