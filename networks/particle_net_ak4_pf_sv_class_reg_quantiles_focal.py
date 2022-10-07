@@ -78,7 +78,7 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
         ## classification term
         input_cat = input[:,:self.nclass].squeeze();
         y_cat     = y_cat.squeeze().long();
-        ce_loos   = torch.nn.functional.cross_entropy(input_cat,y_cat,reduction='none');
+        ce_loss   = torch.nn.functional.cross_entropy(input_cat,y_cat,reduction='none');
         loss_cat  = ((1-torch.exp(-ce_loss))**self.alpha)*ce_loss;
 
         ## regression terms
