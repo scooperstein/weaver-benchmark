@@ -88,5 +88,6 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
 def get_loss(data_config, **kwargs):
     nclass  = len(data_config.label_value);
     ntarget = len(data_config.target_value);
-    return CrossEntropyLogCoshLoss(reduction=kwargs.get('reduction','mean'),loss_lambda=kwargs.get('loss_lambda',1),alpha=kwargs.get('alpha',1)
+    return CrossEntropyLogCoshLoss(reduction=kwargs.get('reduction','mean'),
+                                   loss_lambda=kwargs.get('loss_lambda',1),alpha=kwargs.get('alpha',1),
                                    nclass=nclass,ntarget=ntarget);
