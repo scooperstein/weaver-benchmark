@@ -286,9 +286,9 @@ observers:
 - jet_pnetlast_probHcc
 - jet_pnetlast_probHqq
 - jet_pnetlast_probHgg
-- jet_pnetlast_probQCD
-- jet_pnetlast_probHmm
-- jet_pnetlast_probHee
+- jet_pnetlast_probQCD0hf
+- jet_pnetlast_probQCD1hf
+- jet_pnetlast_probQCD2hf
 - jet_pnetlast_probHtt
 - jet_pnetlast_probHtm
 - jet_pnetlast_probHte
