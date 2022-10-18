@@ -31,12 +31,12 @@ def get_model(data_config, **kwargs):
     sv_features_dims = len(data_config.input_dicts['sv_features'])
     num_classes = len(data_config.label_value);
     num_targets = len(data_config.target_value)
-    model = ParticleNetTagger(pf_features_dims, 
-                              sv_features_dims, 
-                              num_classes,
-                              num_targets,
-                              conv_params, 
-                              fc_params,
+    model = ParticleNetTagger(pf_features_dims=pf_features_dims, 
+                              sv_features_dims=sv_features_dims, 
+                              num_classes=num_classes,
+                              num_targets=num_targets,
+                              conv_params=conv_params, 
+                              fc_params=fc_params,
                               input_dims=point_features,
                               use_fusion=use_fusion,
                               use_fts_bn=kwargs.get('use_fts_bn', False),
@@ -88,6 +88,9 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
 def get_loss(data_config, **kwargs):
     nclass  = len(data_config.label_value);
     ntarget = len(data_config.target_value);
-    return CrossEntropyLogCoshLoss(reduction=kwargs.get('reduction','mean'),
-                                   loss_lambda=kwargs.get('loss_lambda',1),alpha=kwargs.get('alpha',1),
-                                   nclass=nclass,ntarget=ntarget);
+    return CrossEntropyLogCoshLoss(
+        reduction=kwargs.get('reduction','mean'),
+        loss_lambda=kwargs.get('loss_lambda',1),
+        alpha=kwargs.get('alpha',1),
+        nclass=nclass,
+        ntarget=ntarget);

@@ -28,12 +28,12 @@ def get_model(data_config, **kwargs):
     sv_features_dims = len(data_config.input_dicts['sv_features'])
     num_classes = 0
     num_targets = len(data_config.target_value)
-    model = ParticleNetTagger(pf_features_dims, 
-                              sv_features_dims, 
-                              num_classes,
-                              num_targets,
-                              conv_params, 
-                              fc_params,
+    model = ParticleNetTagger(pf_features_dims=pf_features_dims, 
+                              sv_features_dims=sv_features_dims, 
+                              num_classes=num_classes,
+                              num_targets=num_targets,
+                              conv_params=conv_params, 
+                              fc_params=fc_params,
                               input_dims=input_dims,
                               use_fusion=use_fusion,
                               use_fts_bn=kwargs.get('use_fts_bn', False),
