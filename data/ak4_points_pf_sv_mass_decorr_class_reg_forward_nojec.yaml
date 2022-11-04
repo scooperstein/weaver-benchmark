@@ -130,7 +130,6 @@ observers:
    - jet_eta
    - jet_phi
    - jet_mass
-   - jet_mass_raw
    - jet_ncand
    - jet_hflav
    - jet_pflav
