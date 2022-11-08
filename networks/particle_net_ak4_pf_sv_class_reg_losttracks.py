@@ -2,7 +2,7 @@ import numpy as np
 import math
 import torch
 from torch import Tensor
-from nn.model.ParticleNet import ParticleNetLostTrackTagger
+from nn.model.ParticleNet import ParticleNetLostTrkTagger
 
 def get_model(data_config, **kwargs):
 
@@ -33,22 +33,22 @@ def get_model(data_config, **kwargs):
     num_classes = len(data_config.label_value);
     num_targets = len(data_config.target_value)
 
-    model = ParticleNetTagger(pf_features_dims=pf_features_dims, 
-                              sv_features_dims=sv_features_dims, 
-                              lt_features_dims=lt_features_dims, 
-                              num_classes=num_classes,
-                              num_targets=num_targets,
-                              conv_params=conv_params, 
-                              fc_params=fc_params,
-                              input_dims=point_features, 
-                              use_fusion=use_fusion,
-                              use_fts_bn=kwargs.get('use_fts_bn', False),
-                              use_counts=kwargs.get('use_counts', True),
-                              pf_input_dropout=kwargs.get('pf_input_dropout', None),
-                              sv_input_dropout=kwargs.get('sv_input_dropout', None),
-                              lt_input_dropout=kwargs.get('lt_input_dropout', None),
-                              for_inference=kwargs.get('for_inference', False)
-                          )
+    model = ParticleNetLostTrkTagger(pf_features_dims=pf_features_dims, 
+                                     sv_features_dims=sv_features_dims, 
+                                     lt_features_dims=lt_features_dims, 
+                                     num_classes=num_classes,
+                                     num_targets=num_targets,
+                                     conv_params=conv_params, 
+                                     fc_params=fc_params,
+                                     input_dims=point_features, 
+                                     use_fusion=use_fusion,
+                                     use_fts_bn=kwargs.get('use_fts_bn', False),
+                                     use_counts=kwargs.get('use_counts', True),
+                                     pf_input_dropout=kwargs.get('pf_input_dropout', None),
+                                     sv_input_dropout=kwargs.get('sv_input_dropout', None),
+                                     lt_input_dropout=kwargs.get('lt_input_dropout', None),
+                                     for_inference=kwargs.get('for_inference', False)
+                                 )
 
     model_info = {
         'input_names':list(data_config.input_names),
