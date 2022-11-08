@@ -122,7 +122,7 @@ inputs:
       vars:
          - [jet_losttrack_deta, null]
          - [jet_losttrack_dphi, null]
-   pf_features:
+   lt_features:
       length: 5
       vars:
          - [jet_losttrack_pt_log, 1, 0.5]
