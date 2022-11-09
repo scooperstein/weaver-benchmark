@@ -145,7 +145,7 @@ inputs:
          - [jet_losttrack_npixhits, 0, 0.1]
          - [jet_losttrack_nstriphits, 0, 0.1]
    lt_mask:
-      length: 50
+      length: 5
       vars:
          - [lt_mask, null]
 labels:

@@ -309,7 +309,7 @@ inputs:
       - 0
       - 0.1
   lt_mask:
-    length: 50
+    length: 5
     vars:
     - - lt_mask
       - null
