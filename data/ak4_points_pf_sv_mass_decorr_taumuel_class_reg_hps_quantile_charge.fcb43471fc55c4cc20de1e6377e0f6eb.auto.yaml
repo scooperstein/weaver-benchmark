@@ -283,6 +283,7 @@ observers:
 - jet_tauflav
 - jet_taudecaymode
 - jet_lepflav
+- jet_taucharge
 - jet_genmatch_pt
 - jet_genmatch_eta
 - jet_genmatch_phi

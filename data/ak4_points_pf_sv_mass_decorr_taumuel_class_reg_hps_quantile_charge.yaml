@@ -149,6 +149,7 @@ observers:
    - jet_elflav
    - jet_tauflav
    - jet_taudecaymode
+   - jet_taucharge
    - jet_lepflav
    - jet_genmatch_pt
    - jet_genmatch_eta

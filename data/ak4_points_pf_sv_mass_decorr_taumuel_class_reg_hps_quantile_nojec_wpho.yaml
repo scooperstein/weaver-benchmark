@@ -78,8 +78,12 @@ inputs:
          - [jet_pfcand_electron_detaIn, 0, 25]
          - [jet_pfcand_electron_dphiIn, 0, 25]
          - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
+         - [jet_pfcand_electron_sigIphiIphi, 0.001, 100]
          - [jet_pfcand_electron_r9, 0, 1, 0, 1]
          - [jet_pfcand_electron_convProb, null]
+         - [jet_pfcand_photon_sigIetaIeta, 0.002, 50]
+         - [jet_pfcand_photon_r9, 0, 1, 0, 1]
+         - [jet_pfcand_photon_eVeto, null]
    pf_mask:
       length: 50
       vars:
