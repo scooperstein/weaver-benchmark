@@ -13,6 +13,7 @@ preprocess:
 new_variables:
   pfcand_mask: ak.ones_like(jet_pfcand_deta)
   sv_mask: ak.ones_like(jet_sv_deta)
+  lt_mask: ak.ones_like(jet_losttrack_deta)
   label_mu: (jet_muflav==1) & (jet_elflav==0) & (jet_tauflav==0)
   label_el: (jet_elflav==1) & (jet_muflav==0) & (jet_tauflav==0)
   label_tau: (jet_elflav==1) & (jet_muflav==0) & (jet_tauflav==1)
