@@ -2,7 +2,7 @@ import numpy as np
 import math
 import torch
 from torch import Tensor
-from nn.model.ParticleNet import ParticleNetTagger
+from nn.model.ParticleNet import ParticleNetLostTrkTagger
 
 def get_model(data_config, **kwargs):
 
