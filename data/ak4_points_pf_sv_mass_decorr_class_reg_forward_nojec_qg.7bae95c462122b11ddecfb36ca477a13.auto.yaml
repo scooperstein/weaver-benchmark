@@ -1,0 +1,512 @@
+treename: null
+selection: (np.abs(jet_eta)>2.5) & (np.abs(jet_eta)<4.7) & (jet_pt_raw>=25) & (jet_pt_raw<=500)
+  & (event%7!=0) & (jet_genmatch_pt>0) & (jet_muflav == 0) & (jet_elflav == 0) & (jet_tauflav==0)
+  & ~((np.abs(jet_pflav)==5) & (jet_hflav==0)) & ~((np.abs(jet_pflav)==4) & (jet_hflav==0))
+test_time_selection: (np.abs(jet_eta)>2.5) & (np.abs(jet_eta)<4.7) & (jet_pt_raw>=25)
+  & (jet_pt_raw<=500) & (event%7==0) & (jet_genmatch_pt>0) & (jet_muflav == 0) & (jet_elflav
+  == 0) & (jet_tauflav==0) & ~((np.abs(jet_pflav)==5) & (jet_hflav==0)) & ~((np.abs(jet_pflav)==4)
+  & (jet_hflav==0))
+preprocess:
+  method: manual
+  data_fraction: null
+  params: null
+new_variables:
+  pfcand_mask: ak.ones_like(jet_pfcand_deta)
+  sv_mask: ak.ones_like(jet_sv_deta)
+  lt_mask: ak.ones_like(jet_losttrack_deta)
+  label_mu: (jet_muflav==1) & (jet_elflav==0) & (jet_tauflav==0)
+  label_el: (jet_elflav==1) & (jet_muflav==0) & (jet_tauflav==0)
+  label_tau: (jet_elflav==1) & (jet_muflav==0) & (jet_tauflav==1)
+  label_b: (jet_tauflav==0) & (jet_hflav==5) & (jet_muflav==0) & (jet_elflav==0)
+  label_c: (jet_tauflav==0) & (jet_hflav==4) & (jet_muflav==0) & (jet_elflav==0)
+  label_uds: (jet_tauflav==0) & (jet_hflav==0) & (np.abs(jet_pflav)>=0) & (np.abs(jet_pflav)<4)
+    & (jet_muflav==0) & (jet_elflav==0)
+  label_g: (jet_tauflav==0) & (jet_hflav==0) & (np.abs(jet_pflav)==21) & (jet_muflav==0)
+    & (jet_elflav==0)
+  label_q: (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0) & ((jet_hflav==5)
+    | (jet_hflav==4) | ((jet_hflav==0) & (np.abs(jet_pflav)>=0) & (np.abs(jet_pflav)<4)))
+  _label_: np.argmax(np.stack([label_q,label_g], axis=1), axis=1)
+  _labelcheck_: np.sum(np.stack([label_q,label_g], axis=1), axis=1)
+  target_pt: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+  target_pt_q16: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+  target_pt_q84: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+inputs:
+  pf_points:
+    length: 50
+    vars:
+    - - jet_pfcand_deta
+      - null
+    - - jet_pfcand_dphi
+      - null
+  pf_features:
+    length: 50
+    vars:
+    - - jet_pfcand_pt_log
+      - 1
+      - 0.5
+    - - jet_pfcand_energy_log
+      - 1
+      - 0.5
+    - - jet_pfcand_eta
+      - 0
+      - 0.8
+    - - jet_pfcand_deta
+      - null
+    - - jet_pfcand_dphi
+      - null
+    - - jet_pfcand_charge
+      - null
+    - - jet_pfcand_frompv
+      - 2
+      - 1
+    - - jet_pfcand_nlostinnerhits
+      - null
+    - - jet_pfcand_track_chi2
+      - 1
+      - 0.2
+    - - jet_pfcand_track_qual
+      - 0
+      - 0.2
+    - - jet_pfcand_dz
+      - 0
+      - 0.1
+      - -10
+      - 10
+    - - jet_pfcand_dzsig
+      - 0
+      - 0.01
+    - - jet_pfcand_dxy
+      - 0
+      - 0.25
+      - -25
+      - 25
+    - - jet_pfcand_dxysig
+      - 0.01
+    - - jet_pfcand_etarel
+      - 1.5
+      - 0.5
+    - - jet_pfcand_pperp_ratio
+      - 0
+      - 1
+    - - jet_pfcand_ppara_ratio
+      - 0
+      - 1
+    - - jet_pfcand_trackjet_d3d
+      - 0
+      - 0.1
+    - - jet_pfcand_trackjet_d3dsig
+      - 0
+      - 0.005
+    - - jet_pfcand_trackjet_dist
+      - 0
+      - 0.1
+    - - jet_pfcand_trackjet_decayL
+      - 0
+      - 0.01
+    - - jet_pfcand_npixhits
+      - 0
+      - 0.1
+    - - jet_pfcand_nstriphits
+      - 0
+      - 0.1
+    - - jet_pfcand_id
+      - 2
+      - 0.2
+    - - jet_pfcand_hcalfraction
+      - 0
+      - 1
+      - 0
+      - 1
+    - - jet_pfcand_calofraction
+      - 0
+      - 1
+      - 0
+      - 5
+    - - jet_pfcand_photon_sigIetaIeta
+      - 0.002
+      - 50
+    - - jet_pfcand_photon_r9
+      - 0
+      - 1
+      - 0
+      - 1
+    - - jet_pfcand_photon_eVeto
+      - null
+  pf_mask:
+    length: 50
+    vars:
+    - - pfcand_mask
+      - null
+  sv_points:
+    length: 5
+    vars:
+    - - jet_sv_deta
+      - null
+    - - jet_sv_dphi
+      - null
+  sv_features:
+    length: 5
+    vars:
+    - - jet_sv_pt_log
+      - 3
+      - 0.6
+    - - jet_sv_mass
+      - 1.2
+      - 0.3
+    - - jet_sv_deta
+      - null
+    - - jet_sv_dphi
+      - null
+    - - jet_sv_ntrack
+      - 3
+      - 1
+    - - jet_sv_chi2
+      - 1
+      - 0.5
+    - - jet_sv_dxy
+      - 0.2
+      - 0.25
+    - - jet_sv_dxysig
+      - 7
+      - 0.02
+    - - jet_sv_d3d
+      - 0.5
+      - 0.2
+    - - jet_sv_d3dsig
+      - 7
+      - 0.02
+  sv_mask:
+    length: 5
+    vars:
+    - - sv_mask
+      - null
+  lt_points:
+    length: 5
+    vars:
+    - - jet_losttrack_deta
+      - null
+    - - jet_losttrack_dphi
+      - null
+  lt_features:
+    length: 5
+    vars:
+    - - jet_losttrack_pt_log
+      - 1
+      - 0.5
+    - - jet_losttrack_eta
+      - 0
+      - 0.8
+    - - jet_losttrack_deta
+      - null
+    - - jet_losttrack_dphi
+      - null
+    - - jet_losttrack_charge
+      - null
+    - - jet_losttrack_frompv
+      - 2
+      - 1
+    - - jet_losttrack_track_chi2
+      - 1
+      - 0.2
+    - - jet_losttrack_track_qual
+      - 0
+      - 0.2
+    - - jet_losttrack_dz
+      - 0
+      - 0.1
+      - -10
+      - 10
+    - - jet_losttrack_dzsig
+      - 0
+      - 0.01
+    - - jet_losttrack_dxy
+      - 0
+      - 0.25
+      - -25
+      - 25
+    - - jet_losttrack_dxysig
+      - 0.01
+    - - jet_losttrack_etarel
+      - 1.5
+      - 0.5
+    - - jet_losttrack_trackjet_d3d
+      - 0
+      - 0.1
+    - - jet_losttrack_trackjet_d3dsig
+      - 0
+      - 0.005
+    - - jet_losttrack_trackjet_dist
+      - 0
+      - 0.1
+    - - jet_losttrack_trackjet_decayL
+      - 0
+      - 0.01
+    - - jet_losttrack_npixhits
+      - 0
+      - 0.1
+    - - jet_losttrack_nstriphits
+      - 0
+      - 0.1
+  lt_mask:
+    length: 5
+    vars:
+    - - lt_mask
+      - null
+labels:
+  type: simple
+  value:
+  - label_q
+  - label_g
+targets:
+  type: custom
+  value:
+    target_pt: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+    target_pt_q16: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+    target_pt_q84: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+  quantile:
+  - -1
+  - 0.16
+  - 0.84
+observers:
+- event
+- rho
+- npv
+- wgt
+- met
+- npu
+- sample
+- jet_pt
+- jet_pt_raw
+- jet_eta
+- jet_phi
+- jet_mass
+- jet_ncand
+- jet_hflav
+- jet_pflav
+- jet_muflav
+- jet_elflav
+- jet_tauflav
+- jet_lepflav
+- jet_genmatch_pt
+- jet_genmatch_eta
+- jet_genmatch_phi
+- jet_genmatch_mass
+- jet_genmatch_wnu_pt
+- jet_genmatch_wnu_eta
+- jet_genmatch_wnu_phi
+- jet_genmatch_wnu_mass
+- jet_genmatch_nu_pt
+- jet_genmatch_nu_eta
+- jet_genmatch_nu_phi
+- jet_genmatch_nu_mass
+- jet_genmatch_lep_pt
+- jet_genmatch_lep_eta
+- jet_genmatch_lep_phi
+- jet_genmatch_lep_mass
+- jet_genmatch_lep_vis_pt
+- jet_genmatch_lep_vis_eta
+- jet_genmatch_lep_vis_phi
+- jet_genmatch_lep_vis_mass
+- jet_pnet_probb
+- jet_pnet_probc
+- jet_pnet_probuds
+- jet_pnet_probg
+monitor_variables: []
+weights:
+  use_precomputed_weights: false
+  reweight_method: flat
+  reweight_vars:
+    jet_pt_raw:
+    - 25
+    - 30
+    - 35
+    - 42
+    - 51
+    - 63
+    - 82
+    - 105
+    - 135
+    - 500
+    jet_eta:
+    - -4.7
+    - -3.6
+    - -3.1
+    - -2.95
+    - -2.7
+    - 2.7
+    - 2.95
+    - 3.1
+    - 3.6
+    - 4.7
+  reweight_classes:
+  - label_q
+  - label_g
+  class_weights:
+  - 1.0
+  - 2.0
+  reweight_threshold: 15
+  reweight_hists:
+    label_q:
+    - - 0.019301818683743477
+      - 0.036185815930366516
+      - 0.23710547387599945
+      - 0.05896923318505287
+      - 0.030070984736084938
+      - 0.06025102362036705
+      - 0.23710547387599945
+      - 0.03603954613208771
+      - 0.019270747900009155
+    - - 0.026110369712114334
+      - 0.046172551810741425
+      - 0.23710547387599945
+      - 0.07401928305625916
+      - 0.03767523542046547
+      - 0.07578933238983154
+      - 0.23710547387599945
+      - 0.045920196920633316
+      - 0.02600746974349022
+    - - 0.026360511779785156
+      - 0.042300328612327576
+      - 0.23710547387599945
+      - 0.06584211438894272
+      - 0.033502113074064255
+      - 0.06707485020160675
+      - 0.23710547387599945
+      - 0.04229346290230751
+      - 0.02632889151573181
+    - - 0.03073740005493164
+      - 0.043274641036987305
+      - 0.23662163317203522
+      - 0.06530028581619263
+      - 0.03309629485011101
+      - 0.06643940508365631
+      - 0.23710547387599945
+      - 0.04307248443365097
+      - 0.030701778829097748
+    - - 0.03642266243696213
+      - 0.04366755485534668
+      - 0.2231152504682541
+      - 0.06488590687513351
+      - 0.03305055573582649
+      - 0.06585972756147385
+      - 0.22563380002975464
+      - 0.043408140540122986
+      - 0.036350928246974945
+    - - 0.04251168295741081
+      - 0.041202690452337265
+      - 0.19894461333751678
+      - 0.05938142165541649
+      - 0.030621381476521492
+      - 0.06028250977396965
+      - 0.19870899617671967
+      - 0.04100647568702698
+      - 0.042434629052877426
+    - - 0.07740919291973114
+      - 0.05565392225980759
+      - 0.23710547387599945
+      - 0.07706549018621445
+      - 0.03987804800271988
+      - 0.07769922912120819
+      - 0.23710547387599945
+      - 0.055478401482105255
+      - 0.07705637067556381
+    - - 0.1541604846715927
+      - 0.07589738070964813
+      - 0.23710547387599945
+      - 0.09738506376743317
+      - 0.04950602352619171
+      - 0.09830884635448456
+      - 0.23710547387599945
+      - 0.07571057230234146
+      - 0.15370362997055054
+    - - 0.23710547387599945
+      - 0.06761794537305832
+      - 0.20676778256893158
+      - 0.05573922023177147
+      - 0.021885234862565994
+      - 0.05623557046055794
+      - 0.20738153159618378
+      - 0.0678611770272255
+      - 0.23710547387599945
+    label_g:
+    - - 0.033271484076976776
+      - 0.04358891770243645
+      - 0.3279061019420624
+      - 0.07351263612508774
+      - 0.03239240497350693
+      - 0.07606765627861023
+      - 0.3370668888092041
+      - 0.04353125020861626
+      - 0.033185746520757675
+    - - 0.05695495754480362
+      - 0.06958425045013428
+      - 0.477716326713562
+      - 0.11630583554506302
+      - 0.04990722984075546
+      - 0.12118363380432129
+      - 0.4872967600822449
+      - 0.06949158757925034
+      - 0.05682520568370819
+    - - 0.07870800048112869
+      - 0.08298689126968384
+      - 0.5104804039001465
+      - 0.1321611851453781
+      - 0.0549134761095047
+      - 0.13667726516723633
+      - 0.5154838562011719
+      - 0.08287046104669571
+      - 0.07822076231241226
+    - - 0.132627934217453
+      - 0.11402317136526108
+      - 0.6234707236289978
+      - 0.1672499179840088
+      - 0.06799982488155365
+      - 0.17268940806388855
+      - 0.6295396685600281
+      - 0.11342161893844604
+      - 0.13108016550540924
+    - - 0.2241002321243286
+      - 0.15458498895168304
+      - 0.7593681812286377
+      - 0.20580320060253143
+      - 0.08265484869480133
+      - 0.21138624846935272
+      - 0.7624713778495789
+      - 0.1536780446767807
+      - 0.2240297645330429
+    - - 0.37027719616889954
+      - 0.1941841095685959
+      - 0.8548690676689148
+      - 0.22756345570087433
+      - 0.08956726640462875
+      - 0.2318466305732727
+      - 0.8550400733947754
+      - 0.19415444135665894
+      - 0.37177035212516785
+    - - 0.8999999761581421
+      - 0.34633538126945496
+      - 0.8999999761581421
+      - 0.3512381911277771
+      - 0.13312928378582
+      - 0.3576531410217285
+      - 0.8999999761581421
+      - 0.34474319219589233
+      - 0.8999999761581421
+    - - 0.8999999761581421
+      - 0.6161016821861267
+      - 0.8999999761581421
+      - 0.5351506471633911
+      - 0.18974091112613678
+      - 0.5396590828895569
+      - 0.8999999761581421
+      - 0.6141541004180908
+      - 0.8999999761581421
+    - - 0.8999999761581421
+      - 0.8999999761581421
+      - 0.8999999761581421
+      - 0.5095344185829163
+      - 0.14072634279727936
+      - 0.5198553800582886
+      - 0.8999999761581421
+      - 0.898847222328186
+      - 0.8999999761581421
