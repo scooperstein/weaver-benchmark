@@ -2,7 +2,7 @@ import numpy as np
 import math
 import torch
 from torch import Tensor
-from nn.model.ParticleNet import ParticleNetTagger
+from nn.model.ParticleNet import ParticleNetLostTrkTagger
 
 def get_model(data_config, **kwargs):
 
@@ -26,7 +26,7 @@ def get_model(data_config, **kwargs):
         (64,  0.1)
     ]
     ## fully connected output layers
-    fc_conv_params = [
+    fc_domain_params = [
         (224, 0.1),
         (192, 0.1),
         (160, 0.1),
@@ -38,26 +38,29 @@ def get_model(data_config, **kwargs):
     ## classes and features
     pf_features_dims = len(data_config.input_dicts['pf_features'])
     sv_features_dims = len(data_config.input_dicts['sv_features'])
+    lt_features_dims = len(data_config.input_dicts['lt_features'])
     num_classes = len(data_config.label_value);
     num_targets = len(data_config.target_value)
     num_domains = len(data_config.domain_value)
 
-    model = ParticleNetTagger(pf_features_dims=pf_features_dims, 
-                              sv_features_dims=sv_features_dims, 
-                              num_classes=num_classes,
-                              num_targets=num_targets,
-                              num_domains=num_domains,
-                              conv_params=conv_params, 
-                              fc_params=fc_params,
-                              fc_conv_params=fc_conv_params,
-                              input_dims=point_features, 
-                              use_fusion=use_fusion,
-                              use_fts_bn=kwargs.get('use_fts_bn', False),
-                              use_counts=kwargs.get('use_counts', True),
-                              pf_input_dropout=kwargs.get('pf_input_dropout', None),
-                              sv_input_dropout=kwargs.get('sv_input_dropout', None),
-                              for_inference=kwargs.get('for_inference', False)
-                          )
+    model = ParticleNetLostTrkTagger(pf_features_dims=pf_features_dims, 
+                                     sv_features_dims=sv_features_dims, 
+                                     lt_features_dims=lt_features_dims, 
+                                     num_classes=num_classes,
+                                     num_targets=num_targets,
+                                     num_domains=num_domains,
+                                     conv_params=conv_params, 
+                                     fc_params=fc_params,
+                                     fc_domain_params=fc_domain_params,
+                                     input_dims=point_features, 
+                                     use_fusion=use_fusion,
+                                     use_fts_bn=kwargs.get('use_fts_bn', False),
+                                     use_counts=kwargs.get('use_counts', True),
+                                     pf_input_dropout=kwargs.get('pf_input_dropout', None),
+                                     sv_input_dropout=kwargs.get('sv_input_dropout', None),
+                                     sv_input_dropout=kwargs.get('lt_input_dropout', None),
+                                     for_inference=kwargs.get('for_inference', False)
+                                 )
 
     model_info = {
         'input_names':list(data_config.input_names),
