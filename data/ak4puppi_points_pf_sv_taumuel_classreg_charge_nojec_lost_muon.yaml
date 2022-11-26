@@ -13,6 +13,7 @@ new_variables:
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
    pfcand_mask: ak.ones_like(jet_pfcand_deta)
    sv_mask: ak.ones_like(jet_sv_deta)
+   lt_mask: ak.ones_like(jet_losttrack_deta)
    label_mu:  (jet_muflav==1) & (jet_elflav==0) & (jet_tauflav==0)
    label_el:  (jet_elflav==1) & (jet_muflav==0) & (jet_tauflav==0)
    label_taup_1h0p: (jet_tauflav==1) & (jet_taudecaymode==0) & (jet_muflav==0) & (jet_elflav==0) & (jet_taucharge>0)
@@ -79,8 +80,11 @@ inputs:
          - [jet_pfcand_tau_signal, null]
          - [jet_pfcand_hcalfraction, 0, 1, 0, 1]
          - [jet_pfcand_calofraction, 0, 1, 0, 5]
-         - [jet_pfcand_puppiw, null]
-         - [jet_pfcand_muon_id, 0, 0.3]
+         - [jet_pfcand_muon_isglobal, 0, 1]
+         - [jet_pfcand_muon_chi2, 0, 1]
+         - [jet_pfcand_muon_segcomp, 0, 1]
+         - [jet_pfcand_muon_nvalidhit, 0, 1]
+         - [jet_pfcand_muon_nstation, 0, 1]
          - [jet_pfcand_electron_detaIn, 0, 25]
          - [jet_pfcand_electron_dphiIn, 0, 25]
          - [jet_pfcand_electron_sigIetaIeta, 0.002, 50]
@@ -116,7 +120,37 @@ inputs:
       length: 5
       vars:
          - [sv_mask, null]
-
+   lt_points:
+      length: 5
+      vars:
+         - [jet_losttrack_deta, null]
+         - [jet_losttrack_dphi, null]
+   lt_features:
+      length: 5
+      vars:
+         - [jet_losttrack_pt_log, 1, 0.5]
+         - [jet_losttrack_eta, 0, 0.8]
+         - [jet_losttrack_deta, null]
+         - [jet_losttrack_dphi, null]
+         - [jet_losttrack_charge, null]
+         - [jet_losttrack_frompv, 2, 1]
+         - [jet_losttrack_track_chi2, 1, 0.2]
+         - [jet_losttrack_track_qual, 0, 0.2]
+         - [jet_losttrack_dz, 0, 0.1, -10, 10]
+         - [jet_losttrack_dzsig, 0, 0.01]
+         - [jet_losttrack_dxy, 0, 0.25, -25, 25]
+         - [jet_losttrack_dxysig, 0.01]
+         - [jet_losttrack_etarel, 1.5, 0.5]
+         - [jet_losttrack_trackjet_d3d, 0, 0.1]
+         - [jet_losttrack_trackjet_d3dsig, 0, 0.005]
+         - [jet_losttrack_trackjet_dist, 0, 0.1]
+         - [jet_losttrack_trackjet_decayL, 0, 0.01]
+         - [jet_losttrack_npixhits, 0, 0.1]
+         - [jet_losttrack_nstriphits, 0, 0.1]
+   lt_mask:
+      length: 5
+      vars:
+         - [lt_mask, null]
 labels:
    ### type can be `simple`, `custom`
    ### [option 1] use `simple` for binary/multi-class classification, then `value` is a list of 0-1 labels
