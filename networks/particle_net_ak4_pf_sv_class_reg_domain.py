@@ -41,7 +41,7 @@ def get_model(data_config, **kwargs):
     lt_features_dims = len(data_config.input_dicts['lt_features'])
     num_classes = len(data_config.label_value);
     num_targets = len(data_config.target_value)
-    num_domains = len(data_config.domain_value)
+    num_domains = len(data_config.label_domain_value)
 
     model = ParticleNetLostTrkTagger(pf_features_dims=pf_features_dims, 
                                      sv_features_dims=sv_features_dims, 
@@ -58,7 +58,7 @@ def get_model(data_config, **kwargs):
                                      use_counts=kwargs.get('use_counts', True),
                                      pf_input_dropout=kwargs.get('pf_input_dropout', None),
                                      sv_input_dropout=kwargs.get('sv_input_dropout', None),
-                                     sv_input_dropout=kwargs.get('lt_input_dropout', None),
+                                     lt_input_dropout=kwargs.get('lt_input_dropout', None),
                                      for_inference=kwargs.get('for_inference', False)
                                  )
 
@@ -76,7 +76,7 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
     __constants__ = ['reduction','nclass','ntarget','ndomain','loss_lambda','loss_gamma','quantiles','loss_kappa']
 
     def __init__(self, reduction: str = 'mean', nclass: int = 1, ntarget: int = 1, ndomain: int = 1, 
-                 loss_lambda: float = 1., loss_gamma: float = 1., quantiles: list = [], loss_kappa: float 1.) -> None:
+                 loss_lambda: float = 1., loss_gamma: float = 1., quantiles: list = [], loss_kappa: float = 1.) -> None:
         super(CrossEntropyLogCoshLoss, self).__init__(None, None, reduction)
         self.nclass = nclass;
         self.ntarget = ntarget;
