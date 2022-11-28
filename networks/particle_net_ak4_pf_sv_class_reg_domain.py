@@ -75,9 +75,16 @@ def get_model(data_config, **kwargs):
 class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
     __constants__ = ['reduction','nclass','ntarget','ndomain','loss_lambda','loss_gamma','quantiles','loss_kappa']
 
-    def __init__(self, reduction: str = 'mean', nclass: int = 1, ntarget: int = 1, ndomain: int = 1, 
-                 loss_lambda: float = 1., loss_gamma: float = 1., quantiles: list = [], loss_kappa: float = 1.) -> None:
-        super(CrossEntropyLogCoshLoss, self).__init__(None, None, reduction)
+    def __init__(self, 
+                 reduction: str = 'mean', 
+                 nclass:  int = 1, 
+                 ntarget: int = 1, 
+                 ndomain: int = 1, 
+                 loss_lambda: float = 1., 
+                 loss_gamma: float = 1., 
+                 loss_kappa: float = 1., 
+                 quantiles: list = []) -> None:
+        super(CrossEntropyLogCoshLossDomain, self).__init__(None, None, reduction)
         self.nclass = nclass;
         self.ntarget = ntarget;
         self.ndomain = ndomain;
@@ -86,57 +93,60 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
         self.loss_kappa = loss_kappa;
         self.quantiles = quantiles;
 
-    def forward(self, input: Tensor, y_cat: Tensor, y_reg: Tensor, y_domain: Tensor) -> Tensor:
+    def forward(self, 
+                input_cat: Tensor, y_cat: Tensor, 
+                input_reg: Tensor, y_reg: Tensor, 
+                input_domain: Tensor, y_domain: Tensor) -> Tensor:
 
         ## classification term
-        input_cat = input[:,:self.nclass].squeeze();
+        input_cat = input_cat.squeeze();
         y_cat     = y_cat.squeeze().long();
         loss_cat  = torch.nn.functional.cross_entropy(input_cat,y_cat,reduction=self.reduction);
 
         ## regression terms
-        input_reg  = input[:,self.nclass:self.nclass+self.ntarget].squeeze();
+        input_reg  = input_reg.squeeze();
         y_reg      = y_reg.squeeze();
         x_reg      = input_reg-y_reg;
-
+        
         loss_mean  = torch.zeros(size=(0,1));
         loss_quant = torch.zeros(size=(0,1));
 
         for idx,q in enumerate(self.quantiles):
             if q <= 0 and loss_mean.nelement()==0:
-                loss_mean = (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
+                loss_mean  = (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
             elif q <= 0:
-                loss_mean += (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
+                loss_mean  = loss_mean + (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
             if q > 0 and loss_quant.nelement()==0:
-                loss_quant  = q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
-                loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
+                loss_quant = q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
+                loss_quant = loss_quant + (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
             elif q > 0:
-                loss_quant += q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
-                loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);                
+                loss_quant = loss_quant + q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
+                loss_quant = loss_quant + (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);                
 
+        if self.reduction == 'mean':
+            loss_quant = loss_quant.mean();
+            loss_mean = loss_mean.mean();
+        elif self.reduction == 'sum':
+            loss_quant = loss_quant.sum();
+            loss_mean = loss_mean.sum();
+            
         loss_reg = self.loss_lambda*loss_mean+self.loss_gamma*loss_quant;
 
         ## domain terms
-        input_domain  = input[:,self.nclass+self.ntarget:self.nclass+self.ntarget+self.ndomain].squeeze();
+        input_domain  = input_domain.squeeze();
         y_domain      = y_domain.squeeze();
         loss_domain   = self.loss_kappa*torch.nn.functional.cross_entropy(input_domain,y_domain,reduction=self.reduction);
-
-        ## over a batch
-        if self.reduction == 'none':            
-            return loss_cat+loss_reg+loss_domain, loss_cat, loss_reg, loss_domain;
-        elif self.reduction == 'mean':
-            return loss_cat+loss_reg.mean()+loss_domain, loss_cat, loss_reg.mean(), loss_domain;
-        elif self.reduction == 'sum':
-            return loss_cat+loss_reg.sum()+loss_domain, loss_cat, loss_reg.sum(), loss_domain;
+            
+        return loss_cat+loss_reg+loss_domain, loss_cat, loss_reg, loss_domain;
 
 def get_loss(data_config, **kwargs):
 
     nclass  = len(data_config.label_value);
     ntarget = len(data_config.target_value);
-    ndomain = len(data_config.domain_value);
+    ndomain = len(data_config.label_domain_value);
     quantiles = data_config.target_quantile;
 
-    return 
-    CrossEntropyLogCoshLossDomain(
+    return CrossEntropyLogCoshLossDomain(
         reduction=kwargs.get('reduction','mean'),
         loss_lambda=kwargs.get('loss_lambda',1),
         loss_gamma=kwargs.get('loss_gamma',1),
