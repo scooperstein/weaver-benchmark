@@ -1,0 +1,560 @@
+treename: null
+selection: (np.abs(jet_eta)>2.5) & (np.abs(jet_eta)<4.7) & (jet_pt_raw>=25) & (jet_pt_raw<=1000)
+  & (event%7!=0) & (jet_genmatch_pt>0) & (jet_muflav == 0) & (jet_elflav == 0) & (jet_tauflav==0)
+  & ~((np.abs(jet_pflav)==5) & (jet_hflav==0)) & ~((np.abs(jet_pflav)==4) & (jet_hflav==0))
+test_time_selection: (np.abs(jet_eta)>2.5) & (np.abs(jet_eta)<4.7) & (jet_pt_raw>=25)
+  & (jet_pt_raw<=1000) & (event%7==0) & (jet_genmatch_pt>0) & (jet_muflav == 0) &
+  (jet_elflav == 0) & (jet_tauflav==0) & ~((np.abs(jet_pflav)==5) & (jet_hflav==0))
+  & ~((np.abs(jet_pflav)==4) & (jet_hflav==0))
+preprocess:
+  method: manual
+  data_fraction: null
+  params: null
+new_variables:
+  pfcand_mask: ak.ones_like(jet_pfcand_deta)
+  sv_mask: ak.ones_like(jet_sv_deta)
+  lt_mask: ak.ones_like(jet_losttrack_deta)
+  label_mu: (jet_muflav==1) & (jet_elflav==0) & (jet_tauflav==0)
+  label_el: (jet_elflav==1) & (jet_muflav==0) & (jet_tauflav==0)
+  label_tau: (jet_elflav==1) & (jet_muflav==0) & (jet_tauflav==1)
+  label_b: (jet_tauflav==0) & (jet_hflav==5) & (jet_muflav==0) & (jet_elflav==0)
+  label_c: (jet_tauflav==0) & (jet_hflav==4) & (jet_muflav==0) & (jet_elflav==0)
+  label_uds: (jet_tauflav==0) & (jet_hflav==0) & (np.abs(jet_pflav)>=0) & (np.abs(jet_pflav)<4)
+    & (jet_muflav==0) & (jet_elflav==0)
+  label_g: (jet_tauflav==0) & (jet_hflav==0) & (np.abs(jet_pflav)==21) & (jet_muflav==0)
+    & (jet_elflav==0)
+  label_q: (jet_tauflav==0) & (jet_muflav==0) & (jet_elflav==0) & ((jet_hflav==5)
+    | (jet_hflav==4) | ((jet_hflav==0) & (np.abs(jet_pflav)>=0) & (np.abs(jet_pflav)<4)))
+inputs:
+  pf_points:
+    length: 35
+    vars:
+    - - jet_pfcand_deta
+      - null
+    - - jet_pfcand_dphi
+      - null
+  pf_features:
+    length: 35
+    vars:
+    - - jet_pfcand_pt_log
+      - 1
+      - 0.5
+    - - jet_pfcand_energy_log
+      - 1
+      - 0.5
+    - - jet_pfcand_eta
+      - 0
+      - 0.8
+    - - jet_pfcand_deta
+      - null
+    - - jet_pfcand_dphi
+      - null
+    - - jet_pfcand_charge
+      - null
+    - - jet_pfcand_frompv
+      - 2
+      - 1
+    - - jet_pfcand_nlostinnerhits
+      - null
+    - - jet_pfcand_track_chi2
+      - 1
+      - 0.2
+    - - jet_pfcand_track_qual
+      - 0
+      - 0.2
+    - - jet_pfcand_dz
+      - 0
+      - 0.1
+      - -10
+      - 10
+    - - jet_pfcand_dzsig
+      - 0
+      - 0.01
+    - - jet_pfcand_dxy
+      - 0
+      - 0.25
+      - -25
+      - 25
+    - - jet_pfcand_dxysig
+      - 0.01
+    - - jet_pfcand_etarel
+      - 1.5
+      - 0.5
+    - - jet_pfcand_pperp_ratio
+      - 0
+      - 1
+    - - jet_pfcand_ppara_ratio
+      - 0
+      - 1
+    - - jet_pfcand_trackjet_d3d
+      - 0
+      - 0.1
+    - - jet_pfcand_trackjet_d3dsig
+      - 0
+      - 0.005
+    - - jet_pfcand_trackjet_dist
+      - 0
+      - 0.1
+    - - jet_pfcand_trackjet_decayL
+      - 0
+      - 0.01
+    - - jet_pfcand_npixhits
+      - 0
+      - 0.1
+    - - jet_pfcand_nstriphits
+      - 0
+      - 0.1
+    - - jet_pfcand_id
+      - 3
+      - 0.2
+    - - jet_pfcand_hcalfraction
+      - 0
+      - 1
+      - 0
+      - 1
+    - - jet_pfcand_calofraction
+      - 0
+      - 1
+      - 0
+      - 5
+    - - jet_pfcand_muon_isglobal
+      - 0
+      - 1
+    - - jet_pfcand_muon_chi2
+      - 0
+      - 1
+    - - jet_pfcand_muon_segcomp
+      - 0
+      - 1
+    - - jet_pfcand_muon_nvalidhit
+      - 0
+      - 1
+    - - jet_pfcand_muon_nstation
+      - 0
+      - 1
+    - - jet_pfcand_electron_detaIn
+      - 0
+      - 25
+    - - jet_pfcand_electron_dphiIn
+      - 0
+      - 25
+    - - jet_pfcand_electron_sigIetaIeta
+      - 0.002
+      - 50
+    - - jet_pfcand_electron_sigIphiIphi
+      - 0.001
+      - 100
+    - - jet_pfcand_electron_r9
+      - 0
+      - 1
+      - 0
+      - 1
+    - - jet_pfcand_electron_convProb
+      - null
+    - - jet_pfcand_photon_sigIetaIeta
+      - 0.002
+      - 50
+    - - jet_pfcand_photon_r9
+      - 0
+      - 1
+      - 0
+      - 1
+    - - jet_pfcand_photon_eVeto
+      - null
+  pf_mask:
+    length: 35
+    vars:
+    - - pfcand_mask
+      - null
+  sv_points:
+    length: 5
+    vars:
+    - - jet_sv_deta
+      - null
+    - - jet_sv_dphi
+      - null
+  sv_features:
+    length: 5
+    vars:
+    - - jet_sv_pt_log
+      - 3
+      - 0.6
+    - - jet_sv_mass
+      - 1.2
+      - 0.3
+    - - jet_sv_deta
+      - null
+    - - jet_sv_dphi
+      - null
+    - - jet_sv_ntrack
+      - 3
+      - 1
+    - - jet_sv_chi2
+      - 1
+      - 0.5
+    - - jet_sv_dxy
+      - 0.2
+      - 0.25
+    - - jet_sv_dxysig
+      - 7
+      - 0.02
+    - - jet_sv_d3d
+      - 0.5
+      - 0.2
+    - - jet_sv_d3dsig
+      - 7
+      - 0.02
+  sv_mask:
+    length: 5
+    vars:
+    - - sv_mask
+      - null
+  lt_points:
+    length: 5
+    vars:
+    - - jet_losttrack_deta
+      - null
+    - - jet_losttrack_dphi
+      - null
+  lt_features:
+    length: 5
+    vars:
+    - - jet_losttrack_pt_log
+      - 1
+      - 0.5
+    - - jet_losttrack_eta
+      - 0
+      - 0.8
+    - - jet_losttrack_deta
+      - null
+    - - jet_losttrack_dphi
+      - null
+    - - jet_losttrack_charge
+      - null
+    - - jet_losttrack_frompv
+      - 2
+      - 1
+    - - jet_losttrack_track_chi2
+      - 1
+      - 0.2
+    - - jet_losttrack_track_qual
+      - 0
+      - 0.2
+    - - jet_losttrack_dz
+      - 0
+      - 0.1
+      - -10
+      - 10
+    - - jet_losttrack_dzsig
+      - 0
+      - 0.01
+    - - jet_losttrack_dxy
+      - 0
+      - 0.25
+      - -25
+      - 25
+    - - jet_losttrack_dxysig
+      - 0.01
+    - - jet_losttrack_etarel
+      - 1.5
+      - 0.5
+    - - jet_losttrack_trackjet_d3d
+      - 0
+      - 0.1
+    - - jet_losttrack_trackjet_d3dsig
+      - 0
+      - 0.005
+    - - jet_losttrack_trackjet_dist
+      - 0
+      - 0.1
+    - - jet_losttrack_trackjet_decayL
+      - 0
+      - 0.01
+    - - jet_losttrack_npixhits
+      - 0
+      - 0.1
+    - - jet_losttrack_nstriphits
+      - 0
+      - 0.1
+  lt_mask:
+    length: 5
+    vars:
+    - - lt_mask
+      - null
+labels:
+  type: simple
+  value:
+  - label_q
+  - label_g
+targets:
+  type: custom
+  value:
+    target_pt: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+    target_pt_q16: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+    target_pt_q84: np.clip(((label_q) | (label_g))*np.nan_to_num(jet_genmatch_wnu_pt/jet_pt_raw,nan=0,posinf=0,neginf=0),0.2,3)
+  quantile:
+  - -1
+  - 0.16
+  - 0.84
+observers:
+- event
+- rho
+- npv
+- wgt
+- met
+- npu
+- sample
+- jet_pt
+- jet_pt_raw
+- jet_eta
+- jet_phi
+- jet_mass
+- jet_ncand
+- jet_hflav
+- jet_pflav
+- jet_muflav
+- jet_elflav
+- jet_tauflav
+- jet_lepflav
+- jet_genmatch_pt
+- jet_genmatch_eta
+- jet_genmatch_phi
+- jet_genmatch_mass
+- jet_genmatch_wnu_pt
+- jet_genmatch_wnu_eta
+- jet_genmatch_wnu_phi
+- jet_genmatch_wnu_mass
+- jet_genmatch_nu_pt
+- jet_genmatch_nu_eta
+- jet_genmatch_nu_phi
+- jet_genmatch_nu_mass
+- jet_genmatch_lep_pt
+- jet_genmatch_lep_eta
+- jet_genmatch_lep_phi
+- jet_genmatch_lep_mass
+- jet_genmatch_lep_vis_pt
+- jet_genmatch_lep_vis_eta
+- jet_genmatch_lep_vis_phi
+- jet_genmatch_lep_vis_mass
+- jet_pnet_probb
+- jet_pnet_probc
+- jet_pnet_probuds
+- jet_pnet_probg
+monitor_variables: []
+weights:
+  use_precomputed_weights: false
+  reweight_method: flat
+  reweight_vars:
+    jet_pt_raw:
+    - 25
+    - 30
+    - 35
+    - 42
+    - 51
+    - 63
+    - 82
+    - 105
+    - 140
+    - 215
+    - 1000
+    jet_eta:
+    - -4.7
+    - -3.6
+    - -3.1
+    - -2.95
+    - -2.7
+    - 2.7
+    - 2.95
+    - 3.1
+    - 3.6
+    - 4.7
+  reweight_classes:
+  - label_q
+  - label_g
+  class_weights:
+  - 1.0
+  - 2.0
+  reweight_threshold: 15
+  reweight_hists:
+    label_q:
+    - - 0.009915199130773544
+      - 0.019475126639008522
+      - 0.14463922381401062
+      - 0.034011438488960266
+      - 0.01806049607694149
+      - 0.03478030487895012
+      - 0.14463922381401062
+      - 0.0194106362760067
+      - 0.00989770982414484
+    - - 0.013295025564730167
+      - 0.02486695908010006
+      - 0.14463922381401062
+      - 0.043236758559942245
+      - 0.023335086181759834
+      - 0.04414677619934082
+      - 0.14463922381401062
+      - 0.02478562295436859
+      - 0.013263176195323467
+    - - 0.013267355971038342
+      - 0.022687774151563644
+      - 0.14050929248332977
+      - 0.03847433999180794
+      - 0.02100435458123684
+      - 0.03928217664361
+      - 0.1426631361246109
+      - 0.022665442898869514
+      - 0.013247952796518803
+    - - 0.015198392793536186
+      - 0.022881872951984406
+      - 0.1302632838487625
+      - 0.037567105144262314
+      - 0.020760228857398033
+      - 0.038181789219379425
+      - 0.13153387606143951
+      - 0.022724037989974022
+      - 0.01516085397452116
+    - - 0.017601139843463898
+      - 0.022538354620337486
+      - 0.12039691209793091
+      - 0.03628459572792053
+      - 0.020311832427978516
+      - 0.03680618852376938
+      - 0.12111035734415054
+      - 0.022436682134866714
+      - 0.0175643190741539
+    - - 0.02015502192080021
+      - 0.020541122183203697
+      - 0.10177893191576004
+      - 0.031614094972610474
+      - 0.01789027266204357
+      - 0.03201300650835037
+      - 0.10175973922014236
+      - 0.02049318328499794
+      - 0.020094405859708786
+    - - 0.03577472269535065
+      - 0.026736997067928314
+      - 0.1216772198677063
+      - 0.0386526845395565
+      - 0.0215831957757473
+      - 0.038969896733760834
+      - 0.1219918429851532
+      - 0.026653127744793892
+      - 0.0356634259223938
+    - - 0.06443760544061661
+      - 0.031773801892995834
+      - 0.13025495409965515
+      - 0.041384655982255936
+      - 0.02194949984550476
+      - 0.04170183092355728
+      - 0.13040952384471893
+      - 0.03171718865633011
+      - 0.06426544487476349
+    - - 0.14463922381401062
+      - 0.04299407824873924
+      - 0.14463922381401062
+      - 0.04413679614663124
+      - 0.02060074545443058
+      - 0.0445353202521801
+      - 0.14463922381401062
+      - 0.04294538497924805
+      - 0.14463922381401062
+    - - 0.14463922381401062
+      - 0.14463922381401062
+      - 0.14463922381401062
+      - 0.06932400912046432
+      - 0.02014225907623768
+      - 0.06977945566177368
+      - 0.14463922381401062
+      - 0.14463922381401062
+      - 0.14463922381401062
+    label_g:
+    - - 0.016819246113300323
+      - 0.021934041753411293
+      - 0.1648109406232834
+      - 0.03667714074254036
+      - 0.016168048605322838
+      - 0.037991877645254135
+      - 0.16794279217720032
+      - 0.02188192494213581
+      - 0.01676270179450512
+    - - 0.028684264048933983
+      - 0.034791018813848495
+      - 0.23635415732860565
+      - 0.05756895989179611
+      - 0.024687424302101135
+      - 0.05971236154437065
+      - 0.24137169122695923
+      - 0.03479180112481117
+      - 0.028603743761777878
+    - - 0.03938144072890282
+      - 0.04113510996103287
+      - 0.2504749596118927
+      - 0.06439295411109924
+      - 0.0269054863601923
+      - 0.06685260683298111
+      - 0.25427114963531494
+      - 0.041044142097234726
+      - 0.03913048654794693
+    - - 0.06539575755596161
+      - 0.05573315545916557
+      - 0.3015897572040558
+      - 0.08002380281686783
+      - 0.032712917774915695
+      - 0.08281930536031723
+      - 0.3056553900241852
+      - 0.055592671036720276
+      - 0.06497492641210556
+    - - 0.10920058190822601
+      - 0.07443385571241379
+      - 0.3630349934101105
+      - 0.09665421396493912
+      - 0.03909623250365257
+      - 0.09916308522224426
+      - 0.3642697036266327
+      - 0.07404068112373352
+      - 0.10875367373228073
+    - - 0.17714926600456238
+      - 0.0916343405842781
+      - 0.39856672286987305
+      - 0.10371249169111252
+      - 0.04136406257748604
+      - 0.10554536432027817
+      - 0.3981819748878479
+      - 0.0915328860282898
+      - 0.1778603345155716
+    - - 0.4337760806083679
+      - 0.15896716713905334
+      - 0.6314518451690674
+      - 0.15698473155498505
+      - 0.06030706688761711
+      - 0.16006313264369965
+      - 0.631750226020813
+      - 0.15872962772846222
+      - 0.433112233877182
+    - - 0.8999999761581421
+      - 0.25598180294036865
+      - 0.8999999761581421
+      - 0.21434132754802704
+      - 0.07643945515155792
+      - 0.21751590073108673
+      - 0.8999999761581421
+      - 0.2549550235271454
+      - 0.8999999761581421
+    - - 0.8999999761581421
+      - 0.5273779630661011
+      - 0.8999999761581421
+      - 0.3314676880836487
+      - 0.10092006623744965
+      - 0.3366365134716034
+      - 0.8999999761581421
+      - 0.5290330648422241
+      - 0.8999999761581421
+    - - 0.8999999761581421
+      - 0.8999999761581421
+      - 0.8999999761581421
+      - 0.8999999761581421
+      - 0.2075110226869583
+      - 0.8999999761581421
+      - 0.8999999761581421
+      - 0.8999999761581421
+      - 0.8999999761581421
