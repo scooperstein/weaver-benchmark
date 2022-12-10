@@ -73,21 +73,15 @@ def get_model(data_config, **kwargs):
 
 
 class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
-    __constants__ = ['reduction','nclass','ntarget','ndomain','loss_lambda','loss_gamma','quantiles','loss_kappa']
+    __constants__ = ['reduction','loss_lambda','loss_gamma','quantiles','loss_kappa']
 
     def __init__(self, 
                  reduction: str = 'mean', 
-                 nclass:  int = 1, 
-                 ntarget: int = 1, 
-                 ndomain: int = 1, 
                  loss_lambda: float = 1., 
                  loss_gamma: float = 1., 
                  loss_kappa: float = 1., 
                  quantiles: list = []) -> None:
         super(CrossEntropyLogCoshLossDomain, self).__init__(None, None, reduction)
-        self.nclass = nclass;
-        self.ntarget = ntarget;
-        self.ndomain = ndomain;
         self.loss_lambda = loss_lambda;
         self.loss_gamma = loss_gamma;
         self.loss_kappa = loss_kappa;
@@ -141,9 +135,6 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
 
 def get_loss(data_config, **kwargs):
 
-    nclass  = len(data_config.label_value);
-    ntarget = len(data_config.target_value);
-    ndomain = len(data_config.label_domain_value);
     quantiles = data_config.target_quantile;
 
     return CrossEntropyLogCoshLossDomain(
@@ -151,8 +142,5 @@ def get_loss(data_config, **kwargs):
         loss_lambda=kwargs.get('loss_lambda',1),
         loss_gamma=kwargs.get('loss_gamma',1),
         loss_kappa=kwargs.get('loss_kappa',1),
-        nclass=nclass,
-        ntarget=ntarget,
-        ndomain=ndomain,
         quantiles=quantiles
     );
