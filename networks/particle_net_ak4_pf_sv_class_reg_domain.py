@@ -102,8 +102,8 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
         y_reg      = y_reg.squeeze();
         x_reg      = input_reg-y_reg;
         
-        loss_mean  = torch.zeros(size=(0,1));
-        loss_quant = torch.zeros(size=(0,1));
+        loss_mean  = torch.zeros(size=(0,1),requires_grad=loss_cat.requires_grad);
+        loss_quant = torch.zeros(size=(0,1),requires_grad=loss_cat.requires_grad);
 
         for idx,q in enumerate(self.quantiles):
             if q <= 0 and loss_mean.nelement()==0:
@@ -129,8 +129,11 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
         ## domain terms
         input_domain  = input_domain.squeeze();
         y_domain      = y_domain.squeeze();
-        loss_domain   = self.loss_kappa*torch.nn.functional.cross_entropy(input_domain,y_domain,reduction=self.reduction);
-            
+        if input_domain.nelement():
+            loss_domain = self.loss_kappa*torch.nn.functional.cross_entropy(input_domain,y_domain,reduction=self.reduction);
+        else:
+            loss_domain = torch.tensor([0.0],requires_grad=loss_cat.requires_grad)
+        
         return loss_cat+loss_reg+loss_domain, loss_cat, loss_reg, loss_domain;
 
 def get_loss(data_config, **kwargs):

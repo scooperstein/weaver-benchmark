@@ -16,6 +16,8 @@ def get_model(data_config, **kwargs):
         ]
     ## use fusion layer for edge-conv block
     use_fusion = True
+    ## use rev grad i.e. try to maximize or not data vs mc difference
+    use_revgrad = False
     ## fully connected output layers
     fc_params = [
         (224, 0.1),
@@ -25,8 +27,15 @@ def get_model(data_config, **kwargs):
         (96,  0.1),
         (64,  0.1)
     ]
-
-    fc_domain_params = [];
+    ## fully connected output layers
+    fc_domain_params = [
+        (224, 0.1),
+        (192, 0.1),
+        (160, 0.1),
+        (128, 0.1),
+        (96,  0.1),
+        (64,  0.1)
+    ]
 
     ## classes and features
     pf_features_dims = len(data_config.input_dicts['pf_features'])
@@ -49,6 +58,7 @@ def get_model(data_config, **kwargs):
                                      use_fusion=use_fusion,
                                      use_fts_bn=kwargs.get('use_fts_bn', False),
                                      use_counts=kwargs.get('use_counts', True),
+                                     use_revgrad=use_revgrad,
                                      pf_input_dropout=kwargs.get('pf_input_dropout', None),
                                      sv_input_dropout=kwargs.get('sv_input_dropout', None),
                                      lt_input_dropout=kwargs.get('lt_input_dropout', None),
@@ -95,8 +105,8 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
         y_reg      = y_reg.squeeze();
         x_reg      = input_reg-y_reg;
         
-        loss_mean  = torch.zeros(size=(0,1));
-        loss_quant = torch.zeros(size=(0,1));
+        loss_mean  = torch.zeros(size=(0,1),requires_grad=loss_cat.requires_grad);
+        loss_quant = torch.zeros(size=(0,1),requires_grad=loss_cat.requires_grad);
 
         for idx,q in enumerate(self.quantiles):
             if q <= 0 and loss_mean.nelement()==0:
@@ -122,9 +132,12 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
         ## domain terms
         input_domain  = input_domain.squeeze();
         y_domain      = y_domain.squeeze();
-        loss_domain   = self.loss_kappa*torch.nn.functional.cross_entropy(input_domain,y_domain,reduction=self.reduction);
-            
-        return loss_cat+loss_reg-loss_domain, loss_cat, loss_reg, -loss_domain;
+        if input_domain.nelement():
+            loss_domain = self.loss_kappa*torch.nn.functional.cross_entropy(input_domain,y_domain,reduction=self.reduction);
+        else:
+            loss_domain = torch.tensor([0.0],requires_grad=loss_cat.requires_grad)
+        
+        return loss_cat+loss_reg+loss_domain, loss_cat, loss_reg, loss_domain;
 
 def get_loss(data_config, **kwargs):
 
