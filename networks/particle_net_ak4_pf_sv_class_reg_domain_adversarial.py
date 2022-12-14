@@ -137,7 +137,10 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
         else:
             loss_domain = torch.tensor([0.0],requires_grad=loss_cat.requires_grad)
         
-        return loss_cat+loss_reg-loss_domain, loss_cat, loss_reg, loss_domain;
+        if loss_cat+loss_reg-loss_domain > 0:
+            return loss_cat+loss_reg-loss_domain, loss_cat, loss_reg, loss_domain;
+        else:
+            return loss_cat+loss_reg, loss_cat, loss_reg, loss_domain;
 
 def get_loss(data_config, **kwargs):
 
