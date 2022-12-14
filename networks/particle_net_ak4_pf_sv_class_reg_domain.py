@@ -56,6 +56,7 @@ def get_model(data_config, **kwargs):
                                      use_fusion=use_fusion,
                                      use_fts_bn=kwargs.get('use_fts_bn', False),
                                      use_counts=kwargs.get('use_counts', True),
+                                     use_revgrad=kwargs.get('use_revgrad', True),
                                      pf_input_dropout=kwargs.get('pf_input_dropout', None),
                                      sv_input_dropout=kwargs.get('sv_input_dropout', None),
                                      lt_input_dropout=kwargs.get('lt_input_dropout', None),
