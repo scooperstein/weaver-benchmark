@@ -47,8 +47,9 @@ def get_model(data_config, **kwargs):
                                      pf_input_dropout=kwargs.get('pf_input_dropout', None),
                                      sv_input_dropout=kwargs.get('sv_input_dropout', None),
                                      lt_input_dropout=kwargs.get('lt_input_dropout', None),
-                                     for_inference=kwargs.get('for_inference', False)
-                                 )
+                                     for_inference=kwargs.get('for_inference', False),
+                                     alpha_grad=kwargs.get('alpha_grad',1)
+                                )
 
     model_info = {
         'input_names':list(data_config.input_names),
