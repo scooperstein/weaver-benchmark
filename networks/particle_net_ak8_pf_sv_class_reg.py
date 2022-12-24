@@ -87,11 +87,11 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
         loss_quant = None;
 
         for idx,q in enumerate(self.quantiles):
-            if q <= 0 and loss_mean.nelement()==0:
+            if q <= 0 and not loss_mean:
                 loss_mean = (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
             elif q <= 0:
                 loss_mean += (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
-            if q > 0 and loss_quant.nelement()==0:
+            if q > 0 and not loss_quant:
                 loss_quant  = q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
                 loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
             elif q > 0:
