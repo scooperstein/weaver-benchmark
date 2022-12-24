@@ -104,29 +104,38 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
         y_reg      = y_reg.squeeze();
         x_reg      = input_reg-y_reg;
         
-        loss_mean  = torch.zeros(size=(0,1),requires_grad=loss_cat.requires_grad);
-        loss_quant = torch.zeros(size=(0,1),requires_grad=loss_cat.requires_grad);
+        loss_mean  = None;
+        loss_quant = None;
 
         for idx,q in enumerate(self.quantiles):
-            if q <= 0 and loss_mean.nelement()==0:
+            if q <= 0 and loss_mean is None:
                 loss_mean  = (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
-            elif q <= 0:
+            elif q <= 0 and loss_mean is not None:
                 loss_mean  = loss_mean + (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
-            if q > 0 and loss_quant.nelement()==0:
+            if q > 0 and loss_quant is None:
                 loss_quant = q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
                 loss_quant = loss_quant + (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
-            elif q > 0:
+            elif q > 0 and loss_quant is not None:
                 loss_quant = loss_quant + q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
                 loss_quant = loss_quant + (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);                
 
         if self.reduction == 'mean':
-            loss_quant = loss_quant.mean();
-            loss_mean = loss_mean.mean();
+            if loss_quant is not None:
+                loss_quant = loss_quant.mean();
+            if loss_mean is not None:
+                loss_mean = loss_mean.mean();
         elif self.reduction == 'sum':
-            loss_quant = loss_quant.sum();
-            loss_mean = loss_mean.sum();
+            if loss_quant is not None:
+                loss_quant = loss_quant.sum();
+            if loss_mean is not None:
+                loss_mean = loss_mean.sum();
             
-        loss_reg = self.loss_lambda*loss_mean+self.loss_gamma*loss_quant;
+        if loss_quant is not None and loss_mean is not None:
+            loss_reg = self.loss_lambda*loss_mean+self.loss_gamma*loss_quant;
+        elif loss_quant is None:
+            loss_reg = self.loss_lambda*loss_mean;
+        elif loss_mean is None:
+            loss_reg = self.loss_gamma*loss_quant;
 
         ## domain terms
         input_domain  = input_domain.squeeze();

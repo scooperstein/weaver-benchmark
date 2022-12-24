@@ -97,10 +97,12 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
                 loss_quant += q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
                 loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
         
-        if loss_quant is not None:
+        if loss_quant is not None and loss_mean is not None:
             loss_reg = self.loss_lambda*loss_mean+self.loss_gamma*loss_quant;
-        else:
+        elif loss_mean is not None:
             loss_reg = self.loss_lambda*loss_mean;
+        elif loss_quant is not None:
+            loss_reg = self.loss_gamma*loss_quant;
 
         ## over a batch
         if self.reduction == 'none':            
