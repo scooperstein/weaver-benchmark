@@ -63,43 +63,41 @@ def get_model(data_config, **kwargs):
 
 
 class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
-    __constants__ = ['reduction','nclass','ntarget','loss_lambda','loss_gamma','quantiles']
+    __constants__ = ['reduction','loss_lambda','loss_gamma','quantiles']
 
-    def __init__(self, reduction: str = 'mean', nclass: int = 1, ntarget: int = 1, loss_lambda: float = 1., loss_gamma: float = 1., quantiles: list = []) -> None:
+    def __init__(self, reduction: str = 'mean', loss_lambda: float = 1., loss_gamma: float = 1., quantiles: list = []) -> None:
         super(CrossEntropyLogCoshLoss, self).__init__(None, None, reduction)
-        self.nclass = nclass;
-        self.ntarget = ntarget;
         self.loss_lambda = loss_lambda;
         self.loss_gamma = loss_gamma;
         self.quantiles = quantiles;
 
-    def forward(self, input: Tensor, y_cat: Tensor, y_reg: Tensor) -> Tensor:
+    def forward(self, input_cat: Tensor, y_cat: Tensor, input_reg: Tensor, y_reg: Tensor) -> Tensor:
 
-        ## classification term
-        input_cat = input[:,:self.nclass].squeeze();
+        ## classification term                                                                                                                                                                    
+        input_cat = input_cat.squeeze();
         y_cat     = y_cat.squeeze().long();
         loss_cat  = torch.nn.functional.cross_entropy(input_cat,y_cat,reduction=self.reduction);
 
-        ## regression terms
-        input_reg  = input[:,self.nclass:self.nclass+self.ntarget].squeeze();
+        ## regression terms                                                                                                                                                                          
+        input_reg  = input_reg.squeeze();
         y_reg      = y_reg.squeeze();
         x_reg      = input_reg-y_reg;
 
         loss_mean  = torch.zeros(size=(0,1));
         loss_quant = torch.zeros(size=(0,1));
 
-        for idx,q in enumerate(self.quantiles):
-            if q <= 0 and loss_mean.nelement() == 0:
+       for idx,q in enumerate(self.quantiles):
+            if q <= 0 and loss_mean.nelement()==0:
                 loss_mean = (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
             elif q <= 0:
                 loss_mean += (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
-            if q > 0 and loss_quant.nelement() == 0:
+            if q > 0 and loss_quant.nelement()==0:
                 loss_quant  = q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
                 loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
             elif q > 0:
                 loss_quant += q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
-                loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);                
-        
+                loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
+
         loss_reg = self.loss_lambda*loss_mean+self.loss_gamma*loss_quant;
                 
         ## over a batch
@@ -113,12 +111,8 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
 
 def get_loss(data_config, **kwargs):
 
-    nclass  = len(data_config.label_value);
-    ntarget = len(data_config.target_value);
     quantiles = data_config.target_quantile;
     return CrossEntropyLogCoshLoss(reduction=kwargs.get('reduction','mean'),
                                    loss_lambda=kwargs.get('loss_lambda',1),
                                    loss_gamma=kwargs.get('loss_gamma',1),
-                                   nclass=nclass,
-                                   ntarget=ntarget,
                                    quantiles=quantiles);
