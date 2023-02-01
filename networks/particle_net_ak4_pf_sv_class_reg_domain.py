@@ -110,10 +110,9 @@ class CrossEntropyLogCoshLossDomain(torch.nn.L1Loss):
                 input_domain: Tensor, y_domain: Tensor, y_domain_check: Tensor) -> Tensor:
 
         ## classification term
-        input_cat  = input_cat.squeeze();
-        y_cat      = y_cat.squeeze().long();
-        loss_cat   = 0;
-
+        input_cat = input_cat.squeeze();
+        y_cat     = y_cat.squeeze().long();
+        loss_cat  = 0;
         if input_cat.nelement():
             loss_cat = torch.nn.functional.cross_entropy(input_cat,y_cat,reduction=self.reduction);
 
