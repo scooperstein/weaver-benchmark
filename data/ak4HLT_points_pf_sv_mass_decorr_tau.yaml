@@ -11,8 +11,8 @@ test_time_selection:
 new_variables:
    ### [format] name: formula
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
-   pfcand_mask: awkward.JaggedArray.ones_like(jet_pfcand_deta)
-   sv_mask: awkward.JaggedArray.ones_like(jet_sv_deta)
+   pfcand_mask: awkward.JaggedArray.ones_like(jet_hlt_pfcand_deta)
+   sv_mask: awkward.JaggedArray.ones_like(jet_hlt_sv_deta)
    label_taup: (jet_hlt_muflav==0) & (jet_hlt_elflav==0) & (jet_hlt_tauflav==1) & (jet_hlt_taucharge>0)
    label_taum: (jet_hlt_muflav==0) & (jet_hlt_elflav==0) & (jet_hlt_tauflav==1) & (jet_hlt_taucharge<0)
    label_b:   (jet_hlt_tauflav==0) & (jet_hlt_hflav==5) 
