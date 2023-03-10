@@ -83,16 +83,20 @@ class CrossEntropyLogCoshLoss(torch.nn.L1Loss):
         loss_quant = None;
 
         for idx,q in enumerate(self.quantiles):
+            x_reg_eval = x_reg
+            if idx>0 or len(self.quantiles)>1:
+                x_reg_eval = x_reg[:,idx] # protect against dimension 1 tensors
+
             if q <= 0 and loss_mean is None:
-                loss_mean = (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
+                loss_mean = (x_reg_eval)+torch.nn.functional.softplus(-2.*(x_reg_eval))-math.log(2);
             elif q <= 0 and loss_mean is not None:
-                loss_mean += (x_reg[:,idx])+torch.nn.functional.softplus(-2.*(x_reg[:,idx]))-math.log(2);
+                loss_mean += (x_reg_eval)+torch.nn.functional.softplus(-2.*(x_reg_eval))-math.log(2);
             if q > 0 and loss_quant is None:
-                loss_quant  = q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
-                loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);
+                loss_quant  = q*x_reg_eval*torch.ge(x_reg_eval,0)
+                loss_quant += (q-1)*(x_reg_eval)*torch.less(x_reg_eval,0);
             elif q > 0 and loss_quant is not None:
-                loss_quant += q*x_reg[:,idx]*torch.ge(x_reg[:,idx],0)
-                loss_quant += (q-1)*(x_reg[:,idx])*torch.less(x_reg[:,idx],0);                
+                loss_quant += q*x_reg_eval*torch.ge(x_reg_eval,0)
+                loss_quant += (q-1)*(x_reg_eval)*torch.less(x_reg_eval,0);                
 
         if loss_quant is not None and loss_mean is not None:
             loss_reg = self.loss_lambda*loss_mean+self.loss_gamma*loss_quant;
