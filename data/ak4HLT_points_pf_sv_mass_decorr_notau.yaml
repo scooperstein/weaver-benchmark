@@ -135,9 +135,6 @@ observers:
    - jet_hlt_genmatch_wnu_eta
    - jet_hlt_genmatch_wnu_phi
    - jet_hlt_genmatch_wnu_mass
-   - jet_hlt_deepcsv_probb
-   - jet_hlt_deepcsv_probc
-   - jet_hlt_deepcsv_probudsg
    - jet_hlt_pnethlt_probb
    - jet_hlt_pnethlt_probc
    - jet_hlt_pnethlt_probuds  
