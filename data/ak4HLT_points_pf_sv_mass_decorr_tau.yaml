@@ -137,9 +137,6 @@ observers:
    - jet_hlt_genmatch_wnu_eta
    - jet_hlt_genmatch_wnu_phi
    - jet_hlt_genmatch_wnu_mass
-   - jet_hlt_deepcsv_probb
-   - jet_hlt_deepcsv_probc
-   - jet_hlt_deepcsv_probudsg
    - jet_hlt_pnethlt_probb
    - jet_hlt_pnethlt_probc
    - jet_hlt_pnethlt_probuds  
@@ -177,6 +174,5 @@ weights:
       jet_hlt_eta: [-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
    reweight_classes: [label_taup, label_taum, label_b, label_c, label_uds, label_g]
    class_weights: [0.5, 0.5, 1.5, 1.5, 3, 5]
-   reweight_threshold: 30
-   #reweight_threshold: 15
+   reweight_threshold: 15
    reweight_hists:
