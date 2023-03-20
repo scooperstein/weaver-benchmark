@@ -137,6 +137,10 @@ observers:
    - jet_hlt_genmatch_wnu_eta
    - jet_hlt_genmatch_wnu_phi
    - jet_hlt_genmatch_wnu_mass
+   - jet_hlt_genmatch_lep_vis_pt
+   - jet_hlt_genmatch_lep_vis_eta
+   - jet_hlt_genmatch_lep_vis_phi
+   - jet_hlt_genmatch_lep_vis_mass
    - jet_hlt_pnethlt_probb
    - jet_hlt_pnethlt_probc
    - jet_hlt_pnethlt_probuds  
