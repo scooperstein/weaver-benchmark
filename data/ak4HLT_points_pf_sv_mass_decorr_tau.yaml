@@ -141,6 +141,7 @@ observers:
    - jet_hlt_pnethlt_probc
    - jet_hlt_pnethlt_probuds  
    - jet_hlt_pnethlt_probg
+   - jet_hlt_pnethlt_probtauh
    - jet_recomatch_pt
    - jet_recomatch_eta
    - jet_recomatch_phi
