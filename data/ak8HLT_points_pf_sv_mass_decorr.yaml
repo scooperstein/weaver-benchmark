@@ -27,19 +27,19 @@ test_time_selection:
 new_variables:
    ### [format] name: formula
    ### can use functions from `math`, `np` (numpy), and `awkward` in the expression
-   pfcand_mask: ak.ones_like(jet_pfcand_deta)
-   sv_mask: ak.ones_like(jet_sv_deta)
-   label_H_mm: (jet_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==2) & (jet_hlt_elflav==0)
-   label_H_ee: (jet_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==2)
-   label_H_me: (jet_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==1) & (jet_hlt_elflav==1)
-   label_H_te: (jet_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==0) & (jet_hlt_elflav==1)
-   label_H_tm: (jet_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==1) & (jet_hlt_elflav==0)
-   label_H_tt: (jet_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==2) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
-   label_H_bb: (jet_flav_2prong_partonjet_match==6)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
-   label_H_cc: (jet_flav_2prong_partonjet_match==5)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
-   label_H_qq: (jet_flav_2prong_partonjet_match==4)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
-   label_H_gg: (jet_flav_2prong_partonjet_match==3)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
-   label_QCD: (jet_flav_2prong_partonjet_match==-1) & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
+   pfcand_mask: ak.ones_like(jet_hlt_pfcand_deta)
+   sv_mask: ak.ones_like(jet_hlt_sv_deta)
+   label_H_mm: (jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==2) & (jet_hlt_elflav==0)
+   label_H_ee: (jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==2)
+   label_H_me: (jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==1) & (jet_hlt_elflav==1)
+   label_H_te: (jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==0) & (jet_hlt_elflav==1)
+   label_H_tm: (jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==1) & (jet_hlt_elflav==0)
+   label_H_tt: (jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==2) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
+   label_H_bb: (jet_hlt_flav_2prong_partonjet_match==6)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
+   label_H_cc: (jet_hlt_flav_2prong_partonjet_match==5)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
+   label_H_qq: (jet_hlt_flav_2prong_partonjet_match==4)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
+   label_H_gg: (jet_hlt_flav_2prong_partonjet_match==3)  & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
+   label_QCD: (jet_hlt_flav_2prong_partonjet_match==-1) & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)
 
 preprocess:
    ### method: [manual, auto] - whether to use manually specified paraweaver-job-ak4-taumuel-domain-eval-alphameters for variable standardization
@@ -51,8 +51,8 @@ inputs:
    pf_points:
       length: 100
       vars:
-         - [jet_pfcand_deta, null]
-         - [jet_pfcand_dphi, null]
+         - [jet_hlt_pfcand_deta, null]
+         - [jet_hlt_pfcand_dphi, null]
    pf_features:
       length: 100
       vars:
@@ -195,7 +195,7 @@ weights:
    use_precomputed_weights: false
    reweight_method: flat
    reweight_vars:
-      jet_hlt_pt_raw: [200, 250, 315, 396, 499, 628, 791, 995, 1253, 1577, 1987, 2500]
+      jet_hlt_pt: [200, 250, 315, 396, 499, 628, 791, 995, 1253, 1577, 1987, 2500]
       jet_hlt_mass_truth: [25, 35, 45, 55, 65, 75, 85, 95, 105, 115, 125, 135, 150, 170, 190, 215, 250]
    reweight_classes: [label_H_tt, label_H_tm, label_H_te, label_H_me, label_H_mm, label_H_ee, label_H_bb, label_H_cc, label_H_qq, label_H_gg, label_QCD]
    class_weights: [1.0, 0.5, 0.5, 0.15, 0.075, 0.075, 2.0, 2.0, 2.0, 2.0, 4.0]
