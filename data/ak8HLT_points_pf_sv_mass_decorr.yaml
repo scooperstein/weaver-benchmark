@@ -7,7 +7,7 @@ selection:
     ((jet_hlt_flav_2prong_partonjet_match>=3)  & (jet_hlt_flav_2prong_partonjet_match<=6) & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)) |
     ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==2) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)) |
     ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==1) & (jet_hlt_elflav==0)) |
-    ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==0) & (jet_hlt_elflav==1)) 
+    ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==0) & (jet_hlt_elflav==1)))
 
 test_time_selection:
    >-
@@ -16,7 +16,7 @@ test_time_selection:
     ((jet_hlt_flav_2prong_partonjet_match>=3)  & (jet_hlt_flav_2prong_partonjet_match<=6) & (jet_hlt_tauflav==0) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)) |
     ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==2) & (jet_hlt_muflav==0) & (jet_hlt_elflav==0)) |
     ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==1) & (jet_hlt_elflav==0)) |
-    ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==0) & (jet_hlt_elflav==1))
+    ((jet_hlt_flav_2prong_partonjet_match==7)  & (jet_hlt_tauflav==1) & (jet_hlt_muflav==0) & (jet_hlt_elflav==1)))
 
 new_variables:
    ### [format] name: formula
